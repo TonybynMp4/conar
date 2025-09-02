@@ -12,7 +12,7 @@ export default antfu({
   },
   ignores: [
     '**/routeTree.gen.ts',
-    '**/dist-electron/**/*',
+    '**/out/**/*',
     '**/release/**/*',
     '**/.tanstack/**/*',
     '**/.nitro/**/*',

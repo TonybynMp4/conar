@@ -6,12 +6,7 @@ import { app, BrowserWindow, screen, shell } from 'electron'
 import { setupProtocolHandler } from './deep-link'
 import { initElectronEvents } from './events'
 
-const started = createRequire(import.meta.url)('electron-squirrel-startup') as typeof import('electron-squirrel-startup')
 const { autoUpdater } = createRequire(import.meta.url)('electron-updater') as typeof import('electron-updater')
-
-if (started) {
-  app.quit()
-}
 
 initElectronEvents()
 

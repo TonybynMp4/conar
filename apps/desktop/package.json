@@ -12,10 +12,10 @@
     "type": "git",
     "url": "https://github.com/wannabespace/conar.git"
   },
-  "main": "dist-electron/main/index.js",
+  "main": "./out/main/index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "electron-vite dev",
+    "build": "tsc && electron-vite build",
     "build:electron": "electron-builder -p always",
     "test": "vitest run",
     "check-types": "tsc",
@@ -23,7 +23,6 @@
     "drizzle:generate-custom": "drizzle-kit generate --custom && node compile-migrations.ts"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1",
     "electron-updater": "^6.6.2",
     "pg": "^8.16.3"
   },
@@ -59,7 +58,6 @@
     "@tiptap/extension-placeholder": "^3.3.0",
     "@tiptap/react": "^3.3.0",
     "@tiptap/starter-kit": "^3.3.0",
-    "@types/electron-squirrel-startup": "^1.0.2",
     "@types/pg": "^8.15.5",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -73,6 +71,7 @@
     "drizzle-orm": "catalog:",
     "electron": "^37.4.0",
     "electron-builder": "^26.0.12",
+    "electron-vite": "^4.0.0",
     "hookable": "^5.5.3",
     "marked": "^16.2.1",
     "monaco-editor": "^0.52.2",
@@ -94,7 +93,6 @@
     "use-stick-to-bottom": "^1.1.1",
     "uuid": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-electron": "^0.29.0",
     "vite-tsconfig-paths": "^5.1.4",
     "zod": "catalog:"
   }
