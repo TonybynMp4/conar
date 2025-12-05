@@ -4,7 +4,7 @@ import { getBase64FromFiles } from '@conar/shared/utils/base64'
 import { Button } from '@conar/ui/components/button'
 import { ContentSwitch } from '@conar/ui/components/custom/content-switch'
 import { LoadingContent } from '@conar/ui/components/custom/loading-content'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { useMountedEffect } from '@conar/ui/hookas/use-mounted-effect'
 import { RiAttachment2, RiCheckLine, RiCornerDownLeftLine, RiMagicLine, RiStopCircleLine } from '@remixicon/react'
 import { useMutation } from '@tanstack/react-query'
@@ -210,26 +210,27 @@ export function ChatForm() {
               type="button"
               size="icon-xs"
               variant="outline"
-              asChild
+              render={(
+                <label htmlFor="chat-file-upload">
+                  <RiAttachment2 className="size-3" />
+                  <input
+                    id="chat-file-upload"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={handleFileAttach}
+                    tabIndex={-1}
+                    aria-label="Attach files"
+                  />
+                </label>
+              )}
             >
-              <label htmlFor="chat-file-upload">
-                <RiAttachment2 className="size-3" />
-                <input
-                  id="chat-file-upload"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                  onChange={handleFileAttach}
-                  tabIndex={-1}
-                  aria-label="Attach files"
-                />
-              </label>
             </Button>
           </div>
           <div className="flex gap-2 pointer-events-auto">
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger render={(
                 <Button
                   size="icon-xs"
                   variant="outline"
@@ -252,10 +253,14 @@ export function ChatForm() {
                     </ContentSwitch>
                   </LoadingContent>
                 </Button>
+              )}
+              >
               </TooltipTrigger>
-              <TooltipContent side="top">
-                {input.length < 10 ? 'Prompt is too short to enhance' : 'Enhance prompt'}
-              </TooltipContent>
+              <TooltipPositioner side="top">
+                <TooltipContent>
+                  {input.length < 10 ? 'Prompt is too short to enhance' : 'Enhance prompt'}
+                </TooltipContent>
+              </TooltipPositioner>
             </Tooltip>
             {(status === 'streaming' || status === 'submitted')
               ? (

@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@cona
 import { Checkbox } from '@conar/ui/components/checkbox'
 import { Input } from '@conar/ui/components/input'
 import { Label } from '@conar/ui/components/label'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { cn } from '@conar/ui/lib/utils'
 import { RiLoopLeftLine } from '@remixicon/react'
 import { useId } from 'react'
@@ -52,7 +52,7 @@ export function StepSave({ type, name, connectionString, setName, onRandomName, 
               />
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild>
+                  <TooltipTrigger render={(
                     <Button
                       type="button"
                       variant="outline"
@@ -61,10 +61,16 @@ export function StepSave({ type, name, connectionString, setName, onRandomName, 
                     >
                       <RiLoopLeftLine />
                     </Button>
+                  )}
+                  >
                   </TooltipTrigger>
-                  <TooltipContent sideOffset={8}>
-                    Generate a random connection name
-                  </TooltipContent>
+                  <TooltipPositioner sideOffset={8}>
+                    <TooltipPositioner>
+                      <TooltipContent>
+                        Generate a random connection name
+                      </TooltipContent>
+                    </TooltipPositioner>
+                  </TooltipPositioner>
                 </Tooltip>
               </TooltipProvider>
             </div>

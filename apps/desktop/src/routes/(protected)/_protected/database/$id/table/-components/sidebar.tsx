@@ -3,7 +3,7 @@ import { CardTitle } from '@conar/ui/components/card'
 import { ContentSwitch } from '@conar/ui/components/custom/content-switch'
 import { LoadingContent } from '@conar/ui/components/custom/loading-content'
 import { Input } from '@conar/ui/components/input'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { RiCheckLine, RiCloseLine, RiLoopLeftLine } from '@remixicon/react'
 import { useStore } from '@tanstack/react-store'
 import { databaseConstraintsQuery, databaseStore, useDatabaseTablesAndSchemas } from '~/entities/database'
@@ -31,7 +31,7 @@ export function Sidebar() {
           <CardTitle>Tables</CardTitle>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger render={(
                 <Button
                   variant="outline"
                   size="icon-sm"
@@ -46,15 +46,18 @@ export function Sidebar() {
                     </ContentSwitch>
                   </LoadingContent>
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                Refresh tables and schemas list
-                <p className="text-xs text-muted-foreground">
-                  Last updated:
-                  {' '}
-                  {dataUpdatedAt ? new Date(dataUpdatedAt).toLocaleTimeString() : 'never'}
-                </p>
-              </TooltipContent>
+              )}
+              />
+              <TooltipPositioner align="end">
+                <TooltipContent>
+                  Refresh tables and schemas list
+                  <p className="text-xs text-muted-foreground">
+                    Last updated:
+                    {' '}
+                    {dataUpdatedAt ? new Date(dataUpdatedAt).toLocaleTimeString() : 'never'}
+                  </p>
+                </TooltipContent>
+              </TooltipPositioner>
             </Tooltip>
           </TooltipProvider>
         </div>

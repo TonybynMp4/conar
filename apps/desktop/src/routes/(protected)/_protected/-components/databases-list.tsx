@@ -3,7 +3,7 @@ import type { databases } from '~/drizzle'
 import { SafeURL } from '@conar/shared/utils/safe-url'
 import { Badge } from '@conar/ui/components/badge'
 import { Button } from '@conar/ui/components/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPositioner, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
 import { Skeleton } from '@conar/ui/components/skeleton'
 import { copy } from '@conar/ui/lib/copy'
 import { cn } from '@conar/ui/lib/utils'
@@ -68,36 +68,38 @@ function DatabaseCard({ database, onRemove, onRename }: { database: typeof datab
         <DropdownMenuTrigger className="rounded-md p-2 hover:bg-accent-foreground/5">
           <RiMoreLine className="size-4" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation()
-              copy(database.connectionString, 'Connection string copied to clipboard')
-            }}
-          >
-            <RiFileCopyLine className="size-4 opacity-50" />
-            Copy Connection String
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation()
-              onRename()
-            }}
-          >
-            <RiEditLine className="size-4 opacity-50" />
-            Rename
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="text-destructive focus:text-destructive"
-            onClick={(e) => {
-              e.stopPropagation()
-              onRemove()
-            }}
-          >
-            <RiDeleteBinLine className="size-4" />
-            Remove
-          </DropdownMenuItem>
-        </DropdownMenuContent>
+        <DropdownMenuPositioner align="end">
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation()
+                copy(database.connectionString, 'Connection string copied to clipboard')
+              }}
+            >
+              <RiFileCopyLine className="size-4 opacity-50" />
+              Copy Connection String
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation()
+                onRename()
+              }}
+            >
+              <RiEditLine className="size-4 opacity-50" />
+              Rename
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive"
+              onClick={(e) => {
+                e.stopPropagation()
+                onRemove()
+              }}
+            >
+              <RiDeleteBinLine className="size-4" />
+              Remove
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuPositioner>
       </DropdownMenu>
     </Link>
   )
@@ -112,10 +114,12 @@ export function Empty() {
       <p className="text-sm text-muted-foreground mt-1 mb-4 whitespace-pre-line">
         Create a new connection to get started.
       </p>
-      <Button asChild>
+      <Button render={(
         <Link to="/create">
           Create a new connection
         </Link>
+      )}
+      >
       </Button>
     </div>
   )

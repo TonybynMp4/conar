@@ -1,4 +1,4 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { cn } from '@conar/ui/lib/utils'
 import { RiCloseLine } from '@remixicon/react'
 
@@ -36,20 +36,23 @@ export function ChatImages({
               )}
               <div className="absolute inset-0 bg-black/5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity" />
             </TooltipTrigger>
-            <TooltipContent
+            <TooltipPositioner
               side="top"
               align="center"
               sideOffset={15}
-              className="p-1 w-auto shadow-lg"
             >
-              <div className="flex flex-col gap-2">
-                <img
-                  src={image.url}
-                  alt={image.name}
-                  className="max-w-[400px] max-h-[400px] object-contain rounded-md"
-                />
-              </div>
-            </TooltipContent>
+              <TooltipContent
+                className="p-1 w-auto shadow-lg"
+              >
+                <div className="flex flex-col gap-2">
+                  <img
+                    src={image.url}
+                    alt={image.name}
+                    className="max-w-[400px] max-h-[400px] object-contain rounded-md"
+                  />
+                </div>
+              </TooltipContent>
+            </TooltipPositioner>
           </Tooltip>
         </TooltipProvider>
       ))}

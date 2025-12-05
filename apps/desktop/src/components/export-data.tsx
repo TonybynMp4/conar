@@ -3,6 +3,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPositioner,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -11,6 +12,7 @@ import {
 import {
   Tooltip,
   TooltipContent,
+  TooltipPositioner,
   TooltipProvider,
   TooltipTrigger,
 } from '@conar/ui/components/tooltip'
@@ -51,7 +53,7 @@ export function ExportData({
 }: {
   filename?: string
   getData: (limit?: (typeof EXPORT_LIMITS)[number]) => Promise<Record<string, unknown>[]>
-  trigger: (props: { isExporting: boolean }) => React.ReactNode
+  trigger: (props: { isExporting: boolean }) => React.ReactElement<Record<string, unknown>>
 }) {
   const { mutate: exportData, isPending: isExporting } = useMutation({
     mutationFn: async ({
@@ -78,63 +80,70 @@ export function ExportData({
     <TooltipProvider>
       <Tooltip>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <TooltipTrigger asChild>
-              {trigger({ isExporting })}
-            </TooltipTrigger>
+          <DropdownMenuTrigger render={(
+            <TooltipTrigger render={
+              trigger({ isExporting })
+            }
+            />
+          )}
+          >
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger disabled={isExporting}>
-                <RiTableLine />
-                Export as CSV
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                {EXPORT_LIMITS.map(limitOption => (
+          <DropdownMenuPositioner align="end">
+            <DropdownMenuContent>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger disabled={isExporting}>
+                  <RiTableLine />
+                  Export as CSV
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  {EXPORT_LIMITS.map(limitOption => (
+                    <DropdownMenuItem
+                      key={limitOption}
+                      onClick={() => exportData({ format: 'csv', limit: limitOption })}
+                      disabled={isExporting}
+                    >
+                      {`First ${limitOption} rows`}
+                    </DropdownMenuItem>
+                  ))}
                   <DropdownMenuItem
-                    key={limitOption}
-                    onClick={() => exportData({ format: 'csv', limit: limitOption })}
+                    onClick={() => exportData({ format: 'csv' })}
                     disabled={isExporting}
                   >
-                    {`First ${limitOption} rows`}
+                    All rows
                   </DropdownMenuItem>
-                ))}
-                <DropdownMenuItem
-                  onClick={() => exportData({ format: 'csv' })}
-                  disabled={isExporting}
-                >
-                  All rows
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger disabled={isExporting}>
-                <RiBracesLine />
-                Export as JSON
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                {EXPORT_LIMITS.map(limitOption => (
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger disabled={isExporting}>
+                  <RiBracesLine />
+                  Export as JSON
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  {EXPORT_LIMITS.map(limitOption => (
+                    <DropdownMenuItem
+                      key={limitOption}
+                      onClick={() => exportData({ format: 'json', limit: limitOption })}
+                      disabled={isExporting}
+                    >
+                      {`First ${limitOption} rows`}
+                    </DropdownMenuItem>
+                  ))}
                   <DropdownMenuItem
-                    key={limitOption}
-                    onClick={() => exportData({ format: 'json', limit: limitOption })}
+                    onClick={() => exportData({ format: 'json' })}
                     disabled={isExporting}
                   >
-                    {`First ${limitOption} rows`}
+                    All rows
                   </DropdownMenuItem>
-                ))}
-                <DropdownMenuItem
-                  onClick={() => exportData({ format: 'json' })}
-                  disabled={isExporting}
-                >
-                  All rows
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+            </DropdownMenuContent>
+          </DropdownMenuPositioner>
         </DropdownMenu>
-        <TooltipContent>
-          Export data
-        </TooltipContent>
+        <TooltipPositioner>
+          <TooltipContent>
+            Export data
+          </TooltipContent>
+        </TooltipPositioner>
       </Tooltip>
     </TooltipProvider>
   )

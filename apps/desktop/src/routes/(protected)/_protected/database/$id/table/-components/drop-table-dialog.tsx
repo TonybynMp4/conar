@@ -134,7 +134,7 @@ export function DropTableDialog({ ref, database }: DropTableDialogProps) {
           </div>
         </DialogHeader>
         <DialogFooter className="mt-4 flex gap-2">
-          <DialogClose asChild>
+          <DialogClose render={(
             <Button
               variant="outline"
               onClick={() => {
@@ -144,6 +144,8 @@ export function DropTableDialog({ ref, database }: DropTableDialogProps) {
             >
               Cancel
             </Button>
+          )}
+          >
           </DialogClose>
           <Button
             variant="destructive"

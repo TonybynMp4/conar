@@ -1,6 +1,6 @@
 import type { ColumnRenderer } from '~/components/table'
 import { Button } from '@conar/ui/components/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPositioner, DropdownMenuSeparator, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
 import { useIsScrolled } from '@conar/ui/hookas/use-is-scrolled'
 import { useThrottledCallback } from '@conar/ui/hookas/use-throttled-callback'
 import { cn } from '@conar/ui/lib/utils'
@@ -133,7 +133,7 @@ function Header() {
       before={(
         <div className="sticky z-20 left-0 inset-y-0 w-0 flex items-center">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger render={(
               <Button
                 variant="outline"
                 size="icon-sm"
@@ -144,27 +144,33 @@ function Header() {
               >
                 <RiArrowLeftSLine className="relative z-10 size-4" />
               </Button>
+            )}
+            >
             </DropdownMenuTrigger>
-            <DropdownMenuContent side="bottom" align="start" className="min-w-[12rem]">
-              <DropdownMenuLabel>Scroll to column</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {left.map(column => (
-                <DropdownMenuItem
-                  key={column.id}
-                  onClick={() => scrollToColumn(column, 'left')}
-                >
-                  <RiDatabase2Line className="size-4 text-muted-foreground" />
-                  {column.id}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
+            <DropdownMenuPositioner side="bottom" align="start">
+              <DropdownMenuContent className="min-w-[12rem]">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Scroll to column</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {left.map(column => (
+                    <DropdownMenuItem
+                      key={column.id}
+                      onClick={() => scrollToColumn(column, 'left')}
+                    >
+                      <RiDatabase2Line className="size-4 text-muted-foreground" />
+                      {column.id}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenuPositioner>
           </DropdownMenu>
         </div>
       )}
       after={(
         <div className="sticky z-20 right-0 inset-y-0 w-0 flex items-center">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger render={(
               <Button
                 variant="outline"
                 size="icon-sm"
@@ -175,20 +181,26 @@ function Header() {
               >
                 <RiArrowRightSLine className="relative z-10 size-4" />
               </Button>
+            )}
+            >
             </DropdownMenuTrigger>
-            <DropdownMenuContent side="bottom" align="end" className="min-w-[12rem]">
-              <DropdownMenuLabel>Scroll to column</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {right.map(column => (
-                <DropdownMenuItem
-                  key={column.id}
-                  onClick={() => scrollToColumn(column, 'right')}
-                >
-                  <RiDatabase2Line className="size-4 text-muted-foreground" />
-                  {column.id}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
+            <DropdownMenuPositioner side="bottom" align="end">
+              <DropdownMenuContent className="min-w-[12rem]">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Scroll to column</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {right.map(column => (
+                    <DropdownMenuItem
+                      key={column.id}
+                      onClick={() => scrollToColumn(column, 'right')}
+                    >
+                      <RiDatabase2Line className="size-4 text-muted-foreground" />
+                      {column.id}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenuPositioner>
           </DropdownMenu>
         </div>
       )}

@@ -1,13 +1,14 @@
+import type { ButtonProps } from '@conar/ui/components/button'
 import type { editor } from 'monaco-editor'
-import type { ComponentProps, Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 import type { Column } from '../utils/table'
 import type { TableCellProps } from '~/components/table'
 import { sleep } from '@conar/shared/utils/helpers'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@conar/ui/components/alert-dialog'
 import { Button } from '@conar/ui/components/button'
 import { CtrlEnter } from '@conar/ui/components/custom/shortcuts'
-import { Popover, PopoverContent, PopoverTrigger } from '@conar/ui/components/popover'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@conar/ui/components/popover'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { copy } from '@conar/ui/lib/copy'
 import { cn } from '@conar/ui/lib/utils'
 import { RiArrowLeftDownLine, RiArrowRightUpLine, RiCollapseDiagonal2Line, RiExpandDiagonal2Line, RiFileCopyLine } from '@remixicon/react'
@@ -111,7 +112,7 @@ function CellPopoverContent({
           {!shouldHideToggleSize && (
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger render={(
                   <Button
                     variant="outline"
                     size="icon-xs"
@@ -119,19 +120,27 @@ function CellPopoverContent({
                   >
                     {isBig ? <RiCollapseDiagonal2Line className="size-3" /> : <RiExpandDiagonal2Line className="size-3" />}
                   </Button>
+                )}
+                >
                 </TooltipTrigger>
-                <TooltipContent side="bottom">Toggle size</TooltipContent>
+                <TooltipPositioner side="bottom">
+                  <TooltipContent>Toggle size</TooltipContent>
+                </TooltipPositioner>
               </Tooltip>
             </TooltipProvider>
           )}
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger render={(
                 <Button size="icon-xs" variant="outline" onClick={() => copy(value, 'Value copied to clipboard')}>
                   <RiFileCopyLine className="size-3" />
                 </Button>
+              )}
+              >
               </TooltipTrigger>
-              <TooltipContent side="bottom">Copy value</TooltipContent>
+              <TooltipPositioner side="bottom">
+                <TooltipContent>Copy value</TooltipContent>
+              </TooltipPositioner>
             </Tooltip>
           </TooltipProvider>
         </div>
@@ -140,7 +149,7 @@ function CellPopoverContent({
             <>
               {canSetNull && (
                 <AlertDialog>
-                  <AlertDialogTrigger asChild>
+                  <AlertDialogTrigger render={(
                     <Button
                       size="xs"
                       variant="secondary"
@@ -149,6 +158,8 @@ function CellPopoverContent({
                       {' '}
                       <span className="font-mono">null</span>
                     </Button>
+                  )}
+                  >
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
@@ -184,7 +195,7 @@ function CellPopoverContent({
   )
 }
 
-function ForeignButton(props: ComponentProps<'button'>) {
+function ForeignButton(props: ButtonProps) {
   return (
     <Button
       variant="outline"
@@ -196,7 +207,7 @@ function ForeignButton(props: ComponentProps<'button'>) {
   )
 }
 
-function ReferenceButton({ count, className, ...props }: ComponentProps<'button'> & { count: number }) {
+function ReferenceButton({ count, className, ...props }: ButtonProps & { count: number }) {
   return (
     <Button
       variant="outline"
@@ -327,106 +338,121 @@ export function TableCell({
       >
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger render={(
               <PopoverTrigger
-                asChild
                 onClick={e => e.preventDefault()}
                 onDoubleClick={() => setIsPopoverOpen(true)}
                 onMouseLeave={disableInteractIfPossible}
+                render={(
+                  <TableCellContent
+                    className={cellClassName}
+                    style={style}
+                    value={value}
+                    position={position}
+                  >
+                    <span className="truncate">{displayValue}</span>
+                    {!!value && column.foreign && (
+                      <Popover
+                        open={isForeignOpen}
+                        onOpenChange={setIsForeignOpen}
+                      >
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger render={(
+                              <PopoverTrigger render={(
+                                <ForeignButton
+                                  onDoubleClick={e => e.stopPropagation()}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+
+                                    setIsForeignOpen(true)
+                                    setIsPopoverOpen(false)
+                                    setIsReferencesOpen(false)
+                                  }}
+                                />
+                              )}
+                              >
+                              </PopoverTrigger>
+                            )}
+                            >
+                            </TooltipTrigger>
+                            <TooltipContent className="text-sm">
+                              See foreign record
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                        <PopoverPositioner>
+                          <PopoverContent
+                            className="w-[80vw] h-[45vh] p-0 overflow-hidden"
+                            onDoubleClick={e => e.stopPropagation()}
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <TableCellTable
+                              schema={column.foreign.schema}
+                              table={column.foreign.table}
+                              column={column.foreign.column}
+                              value={value}
+                            />
+                          </PopoverContent>
+                        </PopoverPositioner>
+                      </Popover>
+                    )}
+                    {!!value && column.references && column.references.length > 0 && (
+                      <Popover
+                        open={isReferencesOpen}
+                        onOpenChange={setIsReferencesOpen}
+                      >
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger render={(
+                              <PopoverTrigger render={(
+                                <ReferenceButton
+                                  count={column.references.length}
+                                  onDoubleClick={e => e.stopPropagation()}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+
+                                    setIsReferencesOpen(true)
+                                    setIsPopoverOpen(false)
+                                    setIsForeignOpen(false)
+                                  }}
+                                />
+                              )}
+                              >
+                              </PopoverTrigger>
+                            )}
+                            >
+                            </TooltipTrigger>
+                            <TooltipContent className="text-sm">
+                              See referenced records from
+                              {' '}
+                              {column.references.length}
+                              {' '}
+                              table
+                              {column.references.length === 1 ? '' : 's'}
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                        <PopoverPositioner>
+                          <PopoverContent
+                            className="w-[80vw] h-[45vh] p-0 overflow-hidden"
+                            onDoubleClick={e => e.stopPropagation()}
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <TableCellReferences
+                              references={column.references}
+                              value={value}
+                            />
+                          </PopoverContent>
+                        </PopoverPositioner>
+                      </Popover>
+                    )}
+                  </TableCellContent>
+                )}
               >
-                <TableCellContent
-                  className={cellClassName}
-                  style={style}
-                  value={value}
-                  position={position}
-                >
-                  <span className="truncate">{displayValue}</span>
-                  {!!value && column.foreign && (
-                    <Popover
-                      open={isForeignOpen}
-                      onOpenChange={setIsForeignOpen}
-                    >
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <PopoverTrigger asChild>
-                              <ForeignButton
-                                onDoubleClick={e => e.stopPropagation()}
-                                onClick={(e) => {
-                                  e.stopPropagation()
-
-                                  setIsForeignOpen(true)
-                                  setIsPopoverOpen(false)
-                                  setIsReferencesOpen(false)
-                                }}
-                              />
-                            </PopoverTrigger>
-                          </TooltipTrigger>
-                          <TooltipContent className="text-sm">
-                            See foreign record
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                      <PopoverContent
-                        className="w-[80vw] h-[45vh] p-0 overflow-hidden"
-                        onDoubleClick={e => e.stopPropagation()}
-                        onClick={e => e.stopPropagation()}
-                      >
-                        <TableCellTable
-                          schema={column.foreign.schema}
-                          table={column.foreign.table}
-                          column={column.foreign.column}
-                          value={value}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  )}
-                  {!!value && column.references && column.references.length > 0 && (
-                    <Popover
-                      open={isReferencesOpen}
-                      onOpenChange={setIsReferencesOpen}
-                    >
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <PopoverTrigger asChild>
-                              <ReferenceButton
-                                count={column.references.length}
-                                onDoubleClick={e => e.stopPropagation()}
-                                onClick={(e) => {
-                                  e.stopPropagation()
-
-                                  setIsReferencesOpen(true)
-                                  setIsPopoverOpen(false)
-                                  setIsForeignOpen(false)
-                                }}
-                              />
-                            </PopoverTrigger>
-                          </TooltipTrigger>
-                          <TooltipContent className="text-sm">
-                            See referenced records from
-                            {' '}
-                            {column.references.length}
-                            {' '}
-                            table
-                            {column.references.length === 1 ? '' : 's'}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                      <PopoverContent
-                        className="w-[80vw] h-[45vh] p-0 overflow-hidden"
-                        onDoubleClick={e => e.stopPropagation()}
-                        onClick={e => e.stopPropagation()}
-                      >
-                        <TableCellReferences
-                          references={column.references}
-                          value={value}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  )}
-                </TableCellContent>
               </PopoverTrigger>
+            )}
+            >
             </TooltipTrigger>
             {date && (
               <TooltipContent>
@@ -435,18 +461,20 @@ export function TableCell({
             )}
           </Tooltip>
         </TooltipProvider>
-        <PopoverContent
-          className={cn('p-0 w-80 overflow-auto duration-100 [transition:opacity_0.15s,transform_0.15s,width_0.3s]', isBig && 'w-[min(50vw,60rem)]')}
-          onAnimationEnd={disableInteractIfPossible}
-        >
-          <CellPopoverContent
-            rowIndex={rowIndex}
-            isBig={isBig}
-            setIsBig={setIsBig}
-            onClose={() => setIsPopoverOpen(false)}
-            hasUpdateFn={!!onSaveValue}
-          />
-        </PopoverContent>
+        <PopoverPositioner>
+          <PopoverContent
+            className={cn('p-0 w-80 overflow-auto duration-100 [transition:opacity_0.15s,transform_0.15s,width_0.3s]', isBig && 'w-[min(50vw,60rem)]')}
+            onAnimationEnd={disableInteractIfPossible}
+          >
+            <CellPopoverContent
+              rowIndex={rowIndex}
+              isBig={isBig}
+              setIsBig={setIsBig}
+              onClose={() => setIsPopoverOpen(false)}
+              hasUpdateFn={!!onSaveValue}
+            />
+          </PopoverContent>
+        </PopoverPositioner>
       </Popover>
     </TableCellProvider>
   )

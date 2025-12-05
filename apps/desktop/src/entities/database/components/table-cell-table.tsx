@@ -100,16 +100,17 @@ export function TableCellTable({ schema, table, column, value }: { schema: strin
           <Button
             variant="outline"
             size="xs"
-            asChild
+            render={(
+              <Link
+                to="/database/$id/table"
+                params={{ id: database.id }}
+                search={{ schema, table, filters, orderBy }}
+              >
+                <RiCornerRightUpLine className="size-3" />
+                Open table
+              </Link>
+            )}
           >
-            <Link
-              to="/database/$id/table"
-              params={{ id: database.id }}
-              search={{ schema, table, filters, orderBy }}
-            >
-              <RiCornerRightUpLine className="size-3" />
-              Open table
-            </Link>
           </Button>
         </div>
         <Table className="bg-background h-[calc(100%-(--spacing(8)))] rounded-b-lg">

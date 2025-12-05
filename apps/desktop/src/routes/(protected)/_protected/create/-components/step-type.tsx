@@ -13,10 +13,9 @@ export function StepType({ type, setType }: { type: DatabaseType | null, setType
       </CardHeader>
       <CardContent>
         <ToggleGroup
-          type="single"
           variant="outline"
-          value={type ?? undefined}
-          onValueChange={value => setType(value as DatabaseType)}
+          value={type ? [type] : undefined}
+          onValueChange={groupValue => setType(groupValue[0] as DatabaseType)}
         >
           {Object.values(DatabaseType).map(type => (
             <ToggleGroupItem key={type} value={type} aria-label={databaseLabels[type]}>

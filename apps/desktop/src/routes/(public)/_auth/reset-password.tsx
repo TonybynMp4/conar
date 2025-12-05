@@ -165,12 +165,12 @@ function ResetPasswordPage() {
           <Button
             variant="link"
             className="w-full text-center text-muted-foreground"
-            asChild
-          >
-            <Link to="/sign-in">
-              Back to sign in
-            </Link>
-          </Button>
+            render={(
+              <Link to="/sign-in">
+                Back to sign in
+              </Link>
+            )}
+          />
         </form>
       </Form>
     </>

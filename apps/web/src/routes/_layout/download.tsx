@@ -8,7 +8,7 @@ import { Button } from '@conar/ui/components/button'
 import { Card } from '@conar/ui/components/card'
 import { MountedSuspense } from '@conar/ui/components/custom/mounted-suspense'
 import { Linux } from '@conar/ui/components/icons/linux'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { cn } from '@conar/ui/lib/utils'
 import NumberFlow, { NumberFlowGroup } from '@number-flow/react'
 import { RiAppleFill } from '@remixicon/react'
@@ -115,25 +115,28 @@ function DownloadOption({ Icon, type, arch, asset }: {
         </div>
       </div>
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger render={(
           <Button
-            asChild
             size="sm"
             disabled={!asset}
             variant="secondary"
-          >
-            <a
-              href={asset ? asset.url : '#'}
-              download
-            >
-              Download
-            </a>
-          </Button>
-        </TooltipTrigger>
+            render={(
+              <a
+                href={asset ? asset.url : '#'}
+                download
+              >
+                Download
+              </a>
+            )}
+          />
+        )}
+        />
         {asset && (
-          <TooltipContent side="right">
-            {formatBytes(asset.size)}
-          </TooltipContent>
+          <TooltipPositioner side="right">
+            <TooltipContent>
+              {formatBytes(asset.size)}
+            </TooltipContent>
+          </TooltipPositioner>
         )}
       </Tooltip>
     </Card>

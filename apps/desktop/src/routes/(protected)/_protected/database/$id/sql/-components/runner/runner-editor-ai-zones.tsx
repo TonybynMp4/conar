@@ -4,7 +4,7 @@ import type { databases } from '~/drizzle'
 import { Button } from '@conar/ui/components/button'
 import { LoadingContent } from '@conar/ui/components/custom/loading-content'
 import { Enter } from '@conar/ui/components/custom/shortcuts'
-import { Popover, PopoverAnchor, PopoverContent } from '@conar/ui/components/popover'
+import { Popover, PopoverAnchor, PopoverContent, PopoverPositioner } from '@conar/ui/components/popover'
 import { Textarea } from '@conar/ui/components/textarea'
 import { render } from '@conar/ui/lib/render'
 import { cn } from '@conar/ui/lib/utils'
@@ -86,7 +86,7 @@ function RunnerEditorAIZone({
   return (
     <div className="h-full flex flex-col py-1 pr-6">
       <Popover open={!!aiSuggestion}>
-        <PopoverAnchor asChild>
+        <PopoverAnchor render={(
           <div className="h-full relative w-lg">
             <Textarea
               ref={ref}
@@ -126,31 +126,31 @@ function RunnerEditorAIZone({
               </LoadingContent>
             </Button>
           </div>
+        )}
+        >
         </PopoverAnchor>
         {!!aiSuggestion && (
-          <PopoverContent
-            style={{
-              '--lines-height': `${Math.max(aiSuggestion.split('\n').length, originalSql.split('\n').length) * 18 * 2}px`,
-            }}
-            className="p-0 w-lg h-[min(30vh,var(--lines-height))]"
-            onOpenAutoFocus={(e) => {
-              e.preventDefault()
-              ref.current?.focus()
-            }}
-          >
-            <MonacoDiff
-              originalValue={originalSql}
-              modifiedValue={aiSuggestion}
-              language="sql"
-              className="h-full"
-              options={{
-                scrollBeyondLastLine: false,
-                renderIndicators: false,
-                lineNumbers: 'off',
-                folding: false,
+          <PopoverPositioner>
+            <PopoverContent
+              style={{
+                '--lines-height': `${Math.max(aiSuggestion.split('\n').length, originalSql.split('\n').length) * 18 * 2}px`,
               }}
-            />
-          </PopoverContent>
+              className="p-0 w-lg h-[min(30vh,var(--lines-height))]"
+            >
+              <MonacoDiff
+                originalValue={originalSql}
+                modifiedValue={aiSuggestion}
+                language="sql"
+                className="h-full"
+                options={{
+                  scrollBeyondLastLine: false,
+                  renderIndicators: false,
+                  lineNumbers: 'off',
+                  folding: false,
+                }}
+              />
+            </PopoverContent>
+          </PopoverPositioner>
         )}
       </Popover>
     </div>

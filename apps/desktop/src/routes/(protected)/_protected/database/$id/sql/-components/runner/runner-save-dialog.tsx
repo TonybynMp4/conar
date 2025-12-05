@@ -78,10 +78,12 @@ export function RunnerSaveDialog({ ref }: RunnerSaveDialogProps) {
           />
         </DialogHeader>
         <DialogFooter>
-          <DialogClose asChild>
+          <DialogClose render={(
             <Button variant="outline">
               Cancel
             </Button>
+          )}
+          >
           </DialogClose>
           <Button
             disabled={!canConfirm}

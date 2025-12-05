@@ -3,7 +3,7 @@ import type { databases } from '~/drizzle'
 import type { tabType } from '~/entities/database'
 import { getOS, isCtrlAndKey } from '@conar/shared/utils/os'
 import { ScrollArea, ScrollBar, ScrollViewport } from '@conar/ui/components/scroll-area'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { useIsInViewport } from '@conar/ui/hookas/use-is-in-viewport'
 import { useKeyboardEvent } from '@conar/ui/hookas/use-keyboard-event'
 import { cn } from '@conar/ui/lib/utils'
@@ -23,18 +23,22 @@ function CloseButton({ onClick }: { onClick: (e: React.MouseEvent<SVGSVGElement>
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger render={(
           <RiCloseLine
             className="size-3.5 opacity-0 group-hover:opacity-30 hover:opacity-100"
             onClick={onClick}
           />
+        )}
+        >
         </TooltipTrigger>
-        <TooltipContent side="bottom" sideOffset={12}>
-          Close tab (
-          {os.type === 'macos' ? '⌘' : 'Ctrl'}
-          {' '}
-          + W)
-        </TooltipContent>
+        <TooltipPositioner side="bottom" sideOffset={12}>
+          <TooltipContent>
+            Close tab (
+            {os.type === 'macos' ? '⌘' : 'Ctrl'}
+            {' '}
+            + W)
+          </TooltipContent>
+        </TooltipPositioner>
       </Tooltip>
     </TooltipProvider>
   )

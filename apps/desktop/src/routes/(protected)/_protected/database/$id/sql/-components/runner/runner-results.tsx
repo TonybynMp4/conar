@@ -1,6 +1,6 @@
 import { Button } from '@conar/ui/components/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@conar/ui/components/tabs'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { cn } from '@conar/ui/lib/utils'
 import { RiChatAiLine, RiLoader4Line, RiStopLine } from '@remixicon/react'
 import { useQuery } from '@tanstack/react-query'
@@ -50,27 +50,31 @@ export function RunnerResults() {
               className="h-8"
             >
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger render={(
                   <span className={cn('flex items-center justify-center gap-1 w-full', error && 'text-destructive')}>
                     Result
                     {' '}
                     {results.length > 1 ? index + 1 : ''}
                   </span>
+                )}
+                >
                 </TooltipTrigger>
-                <TooltipContent sideOffset={8} className="p-0 pl-2 w-lg">
-                  <Monaco
-                    value={formatSql(query, database.type)}
-                    language="sql"
-                    options={{
-                      scrollBeyondLastLine: false,
-                      readOnly: true,
-                      lineDecorationsWidth: 0,
-                      lineNumbers: 'off',
-                      folding: false,
-                    }}
-                    className="h-48 max-h-[50vh]"
-                  />
-                </TooltipContent>
+                <TooltipPositioner sideOffset={8}>
+                  <TooltipContent className="p-0 pl-2 w-lg">
+                    <Monaco
+                      value={formatSql(query, database.type)}
+                      language="sql"
+                      options={{
+                        scrollBeyondLastLine: false,
+                        readOnly: true,
+                        lineDecorationsWidth: 0,
+                        lineNumbers: 'off',
+                        folding: false,
+                      }}
+                      className="h-48 max-h-[50vh]"
+                    />
+                  </TooltipContent>
+                </TooltipPositioner>
               </Tooltip>
             </TabsTrigger>
           ))}
@@ -92,22 +96,23 @@ export function RunnerResults() {
                     <Button
                       size="sm"
                       variant="outline"
-                      asChild
+                      render={(
+                        <Link
+                          to="/database/$id/sql"
+                          params={{ id: database.id }}
+                          search={{
+                            chatId,
+                            error: [
+                              `Fix the following SQL error by correcting the SQL query on the lines ${startLineNumber} - ${endLineNumber}:`,
+                              error,
+                            ].join('\n'),
+                          }}
+                        >
+                          <RiChatAiLine />
+                          Fix in chat
+                        </Link>
+                      )}
                     >
-                      <Link
-                        to="/database/$id/sql"
-                        params={{ id: database.id }}
-                        search={{
-                          chatId,
-                          error: [
-                            `Fix the following SQL error by correcting the SQL query on the lines ${startLineNumber} - ${endLineNumber}:`,
-                            error,
-                          ].join('\n'),
-                        }}
-                      >
-                        <RiChatAiLine />
-                        Fix in chat
-                      </Link>
                     </Button>
                   </div>
                 )

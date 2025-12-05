@@ -58,11 +58,12 @@ function ForgotPasswordPage() {
             Click the link and create a new password.
           </p>
         </div>
-        <Button asChild>
+        <Button render={(
           <Link to="/sign-in">
             Back to sign In
           </Link>
-        </Button>
+        )}
+        />
       </div>
     )
   }
@@ -116,12 +117,12 @@ function ForgotPasswordPage() {
           <Button
             variant="link"
             className="w-full text-center text-muted-foreground"
-            asChild
-          >
-            <Link to="/sign-in">
-              Back to sign in
-            </Link>
-          </Button>
+            render={(
+              <Link to="/sign-in">
+                Back to sign in
+              </Link>
+            )}
+          />
         </form>
       </Form>
     </>

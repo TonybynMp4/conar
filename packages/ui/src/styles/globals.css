@@ -98,6 +98,24 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --rainbow: rainbow var(--speed, 2s) infinite linear;
+  --animate-accordion-collapse: accordion-collapse var(--tw-duration, 200ms) ease-out;
+  --animate-accordion-expand: accordion-expand var(--tw-duration, 200ms) ease-out;
+  @keyframes accordion-collapse {
+  from {
+    height: var(--accordion-panel-height, auto);
+    }
+  to {
+    height: 0;
+    }
+  }
+  @keyframes accordion-expand {
+  from {
+    height: 0;
+    }
+  to {
+    height: var(--accordion-panel-height, auto);
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -136,4 +154,13 @@ html {
 .bg-primary::selection,
 .bg-primary *::selection {
   @apply bg-white/90 text-primary;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

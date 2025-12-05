@@ -75,25 +75,29 @@ function Pre({ children }: { children?: ReactNode }) {
         open={opened}
         onOpenChange={setOpened}
       >
-        <SingleAccordionTrigger className="py-1.5" asChild>
-          <div className="flex justify-between items-center w-full">
-            <div className="flex items-center gap-2">
+        <SingleAccordionTrigger
+          className="py-1.5"
+          render={(
+            <div className="flex justify-between items-center w-full">
               <div className="flex items-center gap-2">
-                {lang === 'text' ? <RiText className="size-4 text-muted-foreground" /> : <RiCodeLine className="size-4 text-muted-foreground" />}
-                <span className="font-medium">
-                  {langsMap[lang] || lang}
+                <div className="flex items-center gap-2">
+                  {lang === 'text' ? <RiText className="size-4 text-muted-foreground" /> : <RiCodeLine className="size-4 text-muted-foreground" />}
+                  <span className="font-medium">
+                    {langsMap[lang] || lang}
+                  </span>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  <NumberFlow
+                    className="tabular-nums"
+                    value={lines}
+                    suffix={lines === 1 ? ' line' : ' lines'}
+                  />
                 </span>
               </div>
-              <span className="text-xs text-muted-foreground">
-                <NumberFlow
-                  className="tabular-nums"
-                  value={lines}
-                  suffix={lines === 1 ? ' line' : ' lines'}
-                />
-              </span>
+              {codeActions?.({ content, lang })}
             </div>
-            {codeActions?.({ content, lang })}
-          </div>
+          )}
+        >
         </SingleAccordionTrigger>
         <SingleAccordionContent className="p-0">
           <Monaco

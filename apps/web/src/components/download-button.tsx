@@ -1,6 +1,6 @@
 import type { OS } from '@conar/shared/utils/os'
 import { Button } from '@conar/ui/components/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPositioner, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
 import { Linux } from '@conar/ui/components/icons/linux'
 import { RiAppleFill } from '@remixicon/react'
 import { useDownloadLinks } from '~/hooks/use-download-link'
@@ -42,24 +42,31 @@ export function DownloadButton({ fallback }: { fallback?: React.ReactNode }) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger render={(
         <Button size="lg" className="flex items-center justify-center gap-2">
           {Icon && <Icon className="size-4" />}
           Download for
           {' '}
           {links.platform}
         </Button>
+      )}
+      >
       </DropdownMenuTrigger>
       {links.assets.length > 1 && (
-        <DropdownMenuContent>
-          {links.assets.map(asset => (
-            <DropdownMenuItem key={asset.url} asChild>
-              <a href={asset.url} download className="text-foreground flex gap-2">
-                {asset.arch}
-              </a>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
+        <DropdownMenuPositioner>
+          <DropdownMenuContent>
+            {links.assets.map(asset => (
+              <DropdownMenuItem
+                key={asset.url}
+                render={(
+                  <a href={asset.url} download className="text-foreground flex gap-2">
+                    {asset.arch}
+                  </a>
+                )}
+              />
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenuPositioner>
       )}
     </DropdownMenu>
   )

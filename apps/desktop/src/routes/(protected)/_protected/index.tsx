@@ -5,7 +5,7 @@ import { ContentSwitch } from '@conar/ui/components/custom/content-switch'
 import { LoadingContent } from '@conar/ui/components/custom/loading-content'
 import { ScrollArea } from '@conar/ui/components/custom/scroll-area'
 import { Separator } from '@conar/ui/components/separator'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { RiAddLine, RiCheckLine, RiDiscordLine, RiDownloadLine, RiGithubLine, RiGlobalLine, RiLoader4Line, RiLoopLeftLine, RiTwitterXLine } from '@remixicon/react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store'
@@ -49,11 +49,13 @@ function DashboardPage() {
                 </ContentSwitch>
               </LoadingContent>
             </Button>
-            <Button asChild>
+            <Button render={(
               <Link to="/create">
                 <RiAddLine className="size-4" />
                 Add new
               </Link>
+            )}
+            >
             </Button>
           </div>
         </div>
@@ -111,9 +113,11 @@ function DashboardPage() {
                 <TooltipTrigger>
                   <RiDownloadLine className="size-3 animate-bounce text-muted-foreground/50" />
                 </TooltipTrigger>
-                <TooltipContent>
-                  Downloading update...
-                </TooltipContent>
+                <TooltipPositioner>
+                  <TooltipContent>
+                    Downloading update...
+                  </TooltipContent>
+                </TooltipPositioner>
               </Tooltip>
             )}
           </div>

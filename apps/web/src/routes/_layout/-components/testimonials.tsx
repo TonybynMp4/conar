@@ -71,16 +71,19 @@ function JoinTestimonials() {
           <RiTwitterXLine className="size-5 sm:size-6 text-primary" aria-hidden="true" />
         </div>
         <h3 className="font-semibold text-foreground mb-2 text-sm sm:text-base">Want to be featured here?</h3>
-        <Button asChild variant="link">
-          <a
-            href={SOCIAL_LINKS.TWITTER}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Tag @conar_app on
-            <RiTwitterXLine className="size-3 sm:size-4" aria-hidden="true" />
-          </a>
-        </Button>
+        <Button
+          variant="link"
+          render={(
+            <a
+              href={SOCIAL_LINKS.TWITTER}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Tag @conar_app on
+              <RiTwitterXLine className="size-3 sm:size-4" aria-hidden="true" />
+            </a>
+          )}
+        />
       </div>
     </div>
   )

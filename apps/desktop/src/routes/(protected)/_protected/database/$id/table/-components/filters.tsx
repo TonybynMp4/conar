@@ -1,5 +1,5 @@
 import { Button } from '@conar/ui/components/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@conar/ui/components/popover'
+import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@conar/ui/components/popover'
 import { useToggle } from '@conar/ui/hookas/use-toggle'
 import { RiAddLine, RiFilterOffLine } from '@remixicon/react'
 import { useStore } from '@tanstack/react-store'
@@ -35,7 +35,7 @@ export function Filters() {
           />
         ))}
         <Popover open={isOpened} onOpenChange={toggleForm}>
-          <PopoverTrigger asChild>
+          <PopoverTrigger render={(
             <Button
               variant="outline"
               size="icon-xs"
@@ -43,18 +43,22 @@ export function Filters() {
             >
               <RiAddLine className="size-4" />
             </Button>
+          )}
+          >
           </PopoverTrigger>
-          <PopoverContent className="p-0">
-            <FilterForm
-              onAdd={(filter) => {
-                toggleForm(false)
-                store.setState(state => ({
-                  ...state,
-                  filters: [...state.filters, filter],
-                } satisfies typeof state))
-              }}
-            />
-          </PopoverContent>
+          <PopoverPositioner>
+            <PopoverContent className="p-0">
+              <FilterForm
+                onAdd={(filter) => {
+                  toggleForm(false)
+                  store.setState(state => ({
+                    ...state,
+                    filters: [...state.filters, filter],
+                  } satisfies typeof state))
+                }}
+              />
+            </PopoverContent>
+          </PopoverPositioner>
         </Popover>
       </div>
       <Button

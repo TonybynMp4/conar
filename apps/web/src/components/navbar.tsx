@@ -42,57 +42,61 @@ export function Navbar({ className, ...props }: ComponentProps<'header'>) {
           variant="ghost"
           size="icon-sm"
           className="gap-1 sm:gap-2 hidden sm:flex"
-          asChild
+          render={(
+            <a
+              href={SOCIAL_LINKS.TWITTER}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <RiTwitterXLine className="h-3 w-3 sm:h-4 sm:w-4" />
+            </a>
+          )}
         >
-          <a
-            href={SOCIAL_LINKS.TWITTER}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <RiTwitterXLine className="h-3 w-3 sm:h-4 sm:w-4" />
-          </a>
         </Button>
         <Button
           variant="ghost"
           size="icon-sm"
           className="gap-1 sm:gap-2 hidden sm:flex"
-          asChild
+          render={(
+            <a
+              href={SOCIAL_LINKS.DISCORD}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <RiDiscordLine className="size-3 sm:size-4" />
+            </a>
+          )}
         >
-          <a
-            href={SOCIAL_LINKS.DISCORD}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <RiDiscordLine className="size-3 sm:size-4" />
-          </a>
         </Button>
         <Button
           variant="ghost"
           size="sm"
           className="gap-1 sm:gap-2 hidden sm:flex"
-          asChild
+          render={(
+            <a
+              href={SOCIAL_LINKS.GITHUB}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <RiGithubFill className="size-3 sm:size-4" />
+              <NumberFlow
+                value={data?.stargazers_count || 0}
+                className={cn('tabular-nums duration-200 text-xs sm:text-sm', !data && 'animate-pulse text-muted-foreground')}
+              />
+            </a>
+          )}
         >
-          <a
-            href={SOCIAL_LINKS.GITHUB}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <RiGithubFill className="size-3 sm:size-4" />
-            <NumberFlow
-              value={data?.stargazers_count || 0}
-              className={cn('tabular-nums duration-200 text-xs sm:text-sm', !data && 'animate-pulse text-muted-foreground')}
-            />
-          </a>
         </Button>
         <Button
           size="sm"
           className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3"
-          asChild
+          render={(
+            <Link to="/download">
+              <span className="hidden sm:inline">Get Started</span>
+              <span className="sm:hidden">Download</span>
+            </Link>
+          )}
         >
-          <Link to="/download">
-            <span className="hidden sm:inline">Get Started</span>
-            <span className="sm:hidden">Download</span>
-          </Link>
         </Button>
       </div>
     </header>

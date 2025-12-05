@@ -4,7 +4,7 @@ import { CardTitle } from '@conar/ui/components/card'
 import { ContentSwitch } from '@conar/ui/components/custom/content-switch'
 import { ScrollArea } from '@conar/ui/components/custom/scroll-area'
 import { Separator } from '@conar/ui/components/separator'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { copy } from '@conar/ui/lib/copy'
 import { cn } from '@conar/ui/lib/utils'
 import { RiCheckLine, RiDeleteBin7Line, RiFileCopyLine, RiPlayListAddLine, RiSaveLine } from '@remixicon/react'
@@ -41,7 +41,7 @@ export function RunnerQueries({ className, ...props }: ComponentProps<'div'>) {
                   <div key={query.id} className="w-full flex items-center gap-2 px-4 py-1">
                     <TooltipProvider>
                       <Tooltip>
-                        <TooltipTrigger asChild>
+                        <TooltipTrigger render={(
                           <Button
                             size="icon-sm"
                             variant="ghost"
@@ -60,10 +60,14 @@ export function RunnerQueries({ className, ...props }: ComponentProps<'div'>) {
                               <RiPlayListAddLine className="size-4" />
                             </ContentSwitch>
                           </Button>
+                        )}
+                        >
                         </TooltipTrigger>
-                        <TooltipContent side="left">
-                          Append to bottom of runner
-                        </TooltipContent>
+                        <TooltipPositioner side="left">
+                          <TooltipContent>
+                            Append to bottom of runner
+                          </TooltipContent>
+                        </TooltipPositioner>
                       </Tooltip>
                     </TooltipProvider>
                     <div className="flex-1 min-w-0 flex flex-col">
@@ -78,7 +82,7 @@ export function RunnerQueries({ className, ...props }: ComponentProps<'div'>) {
                     </div>
                     <TooltipProvider>
                       <Tooltip>
-                        <TooltipTrigger asChild>
+                        <TooltipTrigger render={(
                           <Button
                             variant="ghost"
                             size="icon-sm"
@@ -95,11 +99,15 @@ export function RunnerQueries({ className, ...props }: ComponentProps<'div'>) {
                               <RiFileCopyLine className="size-4" />
                             </ContentSwitch>
                           </Button>
+                        )}
+                        >
                         </TooltipTrigger>
-                        <TooltipContent>Copy Query</TooltipContent>
+                        <TooltipPositioner>
+                          <TooltipContent>Copy Query</TooltipContent>
+                        </TooltipPositioner>
                       </Tooltip>
                       <Tooltip>
-                        <TooltipTrigger asChild>
+                        <TooltipTrigger render={(
                           <Button
                             variant="ghost"
                             size="icon-sm"
@@ -110,8 +118,12 @@ export function RunnerQueries({ className, ...props }: ComponentProps<'div'>) {
                           >
                             <RiDeleteBin7Line className="size-4" />
                           </Button>
+                        )}
+                        >
                         </TooltipTrigger>
-                        <TooltipContent>Delete Query</TooltipContent>
+                        <TooltipPositioner>
+                          <TooltipContent>Delete Query</TooltipContent>
+                        </TooltipPositioner>
                       </Tooltip>
                     </TooltipProvider>
                   </div>

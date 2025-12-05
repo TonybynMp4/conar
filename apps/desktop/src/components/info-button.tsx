@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { cn } from '@conar/ui/lib/utils'
 import { RiInformationLine } from '@remixicon/react'
 
@@ -7,14 +7,18 @@ export function InfoButton({ children, className, ...props }: ComponentProps<'bu
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger render={(
           <button type="button" className={cn('p-1 rounded-full hover:bg-accent/50', className)} {...props}>
             <RiInformationLine className="size-3 text-muted-foreground" />
           </button>
+        )}
+        >
         </TooltipTrigger>
-        <TooltipContent>
-          {children}
-        </TooltipContent>
+        <TooltipPositioner>
+          <TooltipContent>
+            {children}
+          </TooltipContent>
+        </TooltipPositioner>
       </Tooltip>
     </TooltipProvider>
   )

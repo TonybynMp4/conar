@@ -7,8 +7,8 @@ import { AppLogo } from '@conar/ui/components/brand/app-logo'
 import { Button } from '@conar/ui/components/button'
 import { ContentSwitch } from '@conar/ui/components/custom/content-switch'
 import { ScrollArea } from '@conar/ui/components/custom/scroll-area'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPositioner, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { useElementSize } from '@conar/ui/hookas/use-element-size'
 import { copy } from '@conar/ui/lib/copy'
 import { cn } from '@conar/ui/lib/utils'
@@ -40,7 +40,7 @@ function ChatMessageFooterButton({ onClick, icon, tooltip, disabled }: { onClick
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger render={(
           <Button
             variant="ghost"
             size="icon-sm"
@@ -49,8 +49,12 @@ function ChatMessageFooterButton({ onClick, icon, tooltip, disabled }: { onClick
           >
             {icon}
           </Button>
+        )}
+        >
         </TooltipTrigger>
-        <TooltipContent>{tooltip}</TooltipContent>
+        <TooltipPositioner>
+          <TooltipContent>{tooltip}</TooltipContent>
+        </TooltipPositioner>
       </Tooltip>
     </TooltipProvider>
   )
@@ -90,7 +94,7 @@ function ChatMessageCodeActions({ content }: { content: string }) {
     <div className="flex gap-1">
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger render={(
             <Button
               size="icon-xs"
               variant="ghost"
@@ -108,15 +112,19 @@ function ChatMessageCodeActions({ content }: { content: string }) {
                 <RiFileCopyLine className="size-3.5" />
               </ContentSwitch>
             </Button>
+          )}
+          >
           </TooltipTrigger>
-          <TooltipContent>
-            Copy to clipboard
-          </TooltipContent>
+          <TooltipPositioner>
+            <TooltipContent>
+              Copy to clipboard
+            </TooltipContent>
+          </TooltipPositioner>
         </Tooltip>
       </TooltipProvider>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger render={(
             <Button
               size="icon-xs"
               variant="ghost"
@@ -134,17 +142,21 @@ function ChatMessageCodeActions({ content }: { content: string }) {
                 <RiPlayListAddLine className="size-3.5" />
               </ContentSwitch>
             </Button>
+          )}
+          >
           </TooltipTrigger>
-          <TooltipContent>
-            Append to bottom of runner
-          </TooltipContent>
+          <TooltipPositioner>
+            <TooltipContent>
+              Append to bottom of runner
+            </TooltipContent>
+          </TooltipPositioner>
         </Tooltip>
       </TooltipProvider>
       <DropdownMenu>
         <TooltipProvider>
           <Tooltip>
-            <DropdownMenuTrigger asChild>
-              <TooltipTrigger asChild>
+            <DropdownMenuTrigger render={(
+              <TooltipTrigger render={(
                 <Button
                   size="icon-xs"
                   variant="ghost"
@@ -158,49 +170,55 @@ function ChatMessageCodeActions({ content }: { content: string }) {
                     <RiLoopLeftLine className="size-3.5" />
                   </ContentSwitch>
                 </Button>
+              )}
+              >
               </TooltipTrigger>
+            )}
+            >
             </DropdownMenuTrigger>
-            <TooltipContent>
-              Replace a query in the runner
-            </TooltipContent>
+            <TooltipPositioner>
+              <TooltipContent>
+                Replace a query in the runner
+              </TooltipContent>
+            </TooltipPositioner>
           </Tooltip>
         </TooltipProvider>
-        <DropdownMenuContent
-          align="end"
-          className="min-w-[220px] max-h-64 overflow-auto"
-          onCloseAutoFocus={e => e.preventDefault()}
-          onClick={e => e.stopPropagation()}
-        >
-          <div className="px-2 py-2 text-xs font-medium text-muted-foreground">
-            Replace existing query
-          </div>
-          {editorQueries.length === 0 && (
-            <div className="px-3 py-2 text-xs text-muted-foreground select-none">
-              No queries found
+        <DropdownMenuPositioner align="end">
+          <DropdownMenuContent
+            className="min-w-[220px] max-h-64 overflow-auto"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="px-2 py-2 text-xs font-medium text-muted-foreground">
+              Replace existing query
             </div>
-          )}
-          {editorQueries.map((q, index) => (
-            <DropdownMenuItem
-              key={`${q.startLineNumber}-${q.endLineNumber}`}
-              className="flex items-center justify-between w-full gap-2"
-              onClick={(e) => {
-                e.stopPropagation()
-                replaceQuery(q)
-              }}
-            >
-              <span className="text-xs font-medium">
-                Query
-                {' '}
-                {getQueryNumber(index)}
-              </span>
-              <span className="text-[10px] text-muted-foreground/70 font-mono">
-                {q.startLineNumber === q.endLineNumber
-                  ? `Line ${q.startLineNumber}`
-                  : `Lines ${q.startLineNumber} - ${q.endLineNumber}`}
-              </span>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
+            {editorQueries.length === 0 && (
+              <div className="px-3 py-2 text-xs text-muted-foreground select-none">
+                No queries found
+              </div>
+            )}
+            {editorQueries.map((q, index) => (
+              <DropdownMenuItem
+                key={`${q.startLineNumber}-${q.endLineNumber}`}
+                className="flex items-center justify-between w-full gap-2"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  replaceQuery(q)
+                }}
+              >
+                <span className="text-xs font-medium">
+                  Query
+                  {' '}
+                  {getQueryNumber(index)}
+                </span>
+                <span className="text-[10px] text-muted-foreground/70 font-mono">
+                  {q.startLineNumber === q.endLineNumber
+                    ? `Line ${q.startLineNumber}`
+                    : `Lines ${q.startLineNumber} - ${q.endLineNumber}`}
+                </span>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenuPositioner>
       </DropdownMenu>
     </div>
   )

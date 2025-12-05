@@ -1,45 +1,55 @@
-import type * as React from 'react'
+import { Popover as PopoverPrimitive } from '@base-ui-components/react/popover'
 import { cn } from '@conar/ui/lib/utils'
-import * as PopoverPrimitive from '@radix-ui/react-popover'
 
-function Popover({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Root>) {
+function Popover({ ...props }: PopoverPrimitive.Root.Props) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />
 }
 
-function PopoverTrigger({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {
+function PopoverTrigger({ ...props }: PopoverPrimitive.Trigger.Props) {
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />
 }
 
-function PopoverContent({
-  className,
-  align = 'center',
+function PopoverPositioner({
   sideOffset = 4,
+  portal,
+  className,
   ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Content>) {
+}: PopoverPrimitive.Positioner.Props & {
+  portal?: PopoverPrimitive.Portal.Props
+}) {
   return (
-    <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Content
-        data-slot="popover-content"
-        align={align}
+    <PopoverPrimitive.Portal {...portal}>
+      <PopoverPrimitive.Positioner
+        data-slot="popover-positioner"
         sideOffset={sideOffset}
-        className={cn(
-          'bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-md border p-4 shadow-lg shadow-black/5 outline-hidden',
-          className,
-        )}
+        className={cn('z-50', className)}
         {...props}
       />
     </PopoverPrimitive.Portal>
   )
 }
 
-function PopoverAnchor({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {
-  return <PopoverPrimitive.Anchor data-slot="popover-anchor" {...props} />
+function PopoverContent({ className, ...props }: PopoverPrimitive.Popup.Props) {
+  return (
+    <PopoverPrimitive.Popup
+      data-slot="popover-content"
+      className={cn(
+        'bg-popover text-popover-foreground data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-md border p-4 shadow-md outline-hidden',
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
-export { Popover, PopoverAnchor, PopoverContent, PopoverTrigger }
+function PopoverAnchor({ ...props }: PopoverPrimitive.Arrow.Props) {
+  return <PopoverPrimitive.Arrow data-slot="popover-anchor" {...props} />
+}
+
+export {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+  PopoverPositioner,
+  PopoverTrigger,
+}

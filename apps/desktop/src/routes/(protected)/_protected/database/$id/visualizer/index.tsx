@@ -3,7 +3,7 @@ import type { columnType } from '~/entities/database/sql/columns'
 import { title } from '@conar/shared/utils/title'
 import { AppLogo } from '@conar/ui/components/brand/app-logo'
 import { ReactFlowEdge } from '@conar/ui/components/react-flow/edge'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@conar/ui/components/select'
+import { Select, SelectContent, SelectItem, SelectPositioner, SelectTrigger, SelectValue } from '@conar/ui/components/select'
 import { useMountedEffect } from '@conar/ui/hookas/use-mounted-effect'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -145,7 +145,7 @@ function Visualizer({
       <div className="absolute z-10 top-2 right-2">
         <Select
           value={schema}
-          onValueChange={setSchema}
+          onValueChange={value => setSchema(value!)}
         >
           <SelectTrigger>
             <div className="flex items-center gap-2">
@@ -155,13 +155,15 @@ function Visualizer({
               <SelectValue placeholder="Select schema" />
             </div>
           </SelectTrigger>
-          <SelectContent>
-            {schemas.map(schema => (
-              <SelectItem key={schema} value={schema}>
-                {schema}
-              </SelectItem>
-            ))}
-          </SelectContent>
+          <SelectPositioner>
+            <SelectContent>
+              {schemas.map(schema => (
+                <SelectItem key={schema} value={schema}>
+                  {schema}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </SelectPositioner>
         </Select>
       </div>
       <ReactFlow

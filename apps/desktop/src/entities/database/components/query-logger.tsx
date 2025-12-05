@@ -8,7 +8,7 @@ import { CardTitle } from '@conar/ui/components/card'
 import { ContentSwitch } from '@conar/ui/components/custom/content-switch'
 import { ScrollArea } from '@conar/ui/components/custom/scroll-area'
 import { Label } from '@conar/ui/components/label'
-import { Popover, PopoverContent, PopoverTrigger } from '@conar/ui/components/popover'
+import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@conar/ui/components/popover'
 import { useVirtual } from '@conar/ui/hooks/use-virtual'
 import { cn } from '@conar/ui/lib/utils'
 import { RiArrowDownLine, RiCheckboxCircleLine, RiCheckLine, RiCloseCircleLine, RiCloseLine, RiDeleteBinLine, RiFileListLine, RiTimeLine } from '@remixicon/react'
@@ -112,58 +112,62 @@ function Log({ query, className, database }: { query: SqlLog, className?: string
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger render={(
         <LogTrigger
           query={query}
           className={cn(className, isOpen && 'bg-accent/30')}
           onMouseLeave={closePopover}
         />
-      </PopoverTrigger>
-      <PopoverContent
-        className="flex gap-4 w-[95vw]"
-        onAnimationEnd={closePopover}
+      )}
       >
-        <div className="flex-1 min-w-0 space-y-2">
-          <div className="space-y-2">
-            <Label>Query</Label>
-            <Monaco
-              value={formatSql(query.sql, database.type)}
-              language="sql"
-              options={monacoOptions}
-              className="h-[50vh] border rounded-md overflow-hidden"
-            />
-          </div>
-          {query.values && query.values.length > 0 && (
+      </PopoverTrigger>
+      <PopoverPositioner>
+        <PopoverContent
+          className="flex gap-4 w-[70vw]"
+          onAnimationEnd={closePopover}
+        >
+          <div className="flex-1 min-w-0 space-y-2">
             <div className="space-y-2">
-              <Label>Values</Label>
-              <pre className="bg-accent/50 p-2 rounded text-xs font-mono overflow-x-auto">
-                {formatValues(query.values)}
-              </pre>
-            </div>
-          )}
-        </div>
-        <div className="flex-1 min-w-0 space-y-2">
-          {!!query.result && (
-            <div className="space-y-2">
-              <Label>Result</Label>
+              <Label>Query</Label>
               <Monaco
-                value={JSON.stringify(query.result)}
-                language="json"
+                value={formatSql(query.sql, database.type)}
+                language="sql"
                 options={monacoOptions}
                 className="h-[50vh] border rounded-md overflow-hidden"
               />
             </div>
-          )}
-          {query.error && (
-            <div className="space-y-2">
-              <Label className="text-destructive">Error</Label>
-              <pre className="bg-red-50 dark:bg-red-950 p-2 rounded text-xs font-mono overflow-x-auto text-red-700 dark:text-red-300">
-                {query.error}
-              </pre>
-            </div>
-          )}
-        </div>
-      </PopoverContent>
+            {query.values && query.values.length > 0 && (
+              <div className="space-y-2">
+                <Label>Values</Label>
+                <pre className="bg-accent/50 p-2 rounded text-xs font-mono overflow-x-auto">
+                  {formatValues(query.values)}
+                </pre>
+              </div>
+            )}
+          </div>
+          <div className="flex-1 min-w-0 space-y-2">
+            {!!query.result && (
+              <div className="space-y-2">
+                <Label>Result</Label>
+                <Monaco
+                  value={JSON.stringify(query.result)}
+                  language="json"
+                  options={monacoOptions}
+                  className="h-[50vh] border rounded-md overflow-hidden"
+                />
+              </div>
+            )}
+            {query.error && (
+              <div className="space-y-2">
+                <Label className="text-destructive">Error</Label>
+                <pre className="bg-red-50 dark:bg-red-950 p-2 rounded text-xs font-mono overflow-x-auto text-red-700 dark:text-red-300">
+                  {query.error}
+                </pre>
+              </div>
+            )}
+          </div>
+        </PopoverContent>
+      </PopoverPositioner>
     </Popover>
   )
 }
@@ -233,7 +237,7 @@ export function QueryLogger({ database, className }: {
           </CardTitle>
           <ButtonGroup>
             <Button
-              size="xs"
+              size="sm"
               variant="outline"
               className={cn('text-success!', statusGroup === 'success' && 'bg-accent!')}
               onClick={() => toggleGroup('success')}

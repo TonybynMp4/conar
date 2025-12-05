@@ -6,8 +6,10 @@ import { ScrollArea } from '@conar/ui/components/custom/scroll-area'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPositioner,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@conar/ui/components/dropdown-menu'
@@ -120,60 +122,68 @@ export function ChatHeader({ chatId }: { chatId: string }) {
           <Button
             variant="outline"
             size="icon-sm"
-            asChild
             onClick={() => store.setState(state => ({
               ...state,
               lastOpenedChatId: null,
             } satisfies typeof state))}
+            render={(
+              <Link
+                to="/database/$id/sql"
+                params={{ id }}
+              >
+                <RiAddLine className="size-4" />
+              </Link>
+            )}
           >
-            <Link
-              to="/database/$id/sql"
-              params={{ id }}
-            >
-              <RiAddLine className="size-4" />
-            </Link>
           </Button>
         )}
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger render={(
             <Button
               variant="outline"
               size="icon-sm"
             >
               <RiHistoryLine className="size-4" />
             </Button>
+          )}
+          >
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-60">
-            <DropdownMenuLabel>Chats</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <ScrollArea className="max-h-[70vh]">
-              {allChats.length === 0
-                ? <DropdownMenuItem disabled>No chats found</DropdownMenuItem>
-                : (
-                    Object.entries(grouped).map(([group, chats], idx) => (
-                      <div key={group}>
-                        <DropdownMenuLabel className="opacity-70 text-xs">{groupLabelMap[group as Group]}</DropdownMenuLabel>
-                        {chats.map(chat => (
-                          <DropdownMenuItem
-                            key={chat.id}
-                            asChild
-                          >
-                            <Link
-                              to="/database/$id/sql"
-                              params={{ id }}
-                              search={{ chatId: chat.id }}
-                              className={cn('text-foreground', chat.id === chatId && 'bg-accent')}
-                            >
-                              {chat.title || <span className="animate-pulse bg-muted rounded-md w-30 h-4" />}
-                            </Link>
-                          </DropdownMenuItem>
-                        ))}
-                        {idx !== Object.keys(grouped).length - 1 && <DropdownMenuSeparator />}
-                      </div>
-                    ))
-                  )}
-            </ScrollArea>
-          </DropdownMenuContent>
+          <DropdownMenuPositioner align="end">
+            <DropdownMenuContent className="min-w-60">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Chats</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <ScrollArea className="max-h-[70vh]">
+                  {allChats.length === 0
+                    ? <DropdownMenuItem disabled>No chats found</DropdownMenuItem>
+                    : (
+                        Object.entries(grouped).map(([group, chats], idx) => (
+                          <DropdownMenuGroup key={group}>
+                            <DropdownMenuLabel className="opacity-70 text-xs">{groupLabelMap[group as Group]}</DropdownMenuLabel>
+                            {chats.map(chat => (
+                              <DropdownMenuItem
+                                key={chat.id}
+                                render={(
+                                  <Link
+                                    to="/database/$id/sql"
+                                    params={{ id }}
+                                    search={{ chatId: chat.id }}
+                                    className={cn('text-foreground', chat.id === chatId && 'bg-accent')}
+                                  >
+                                    {chat.title || <span className="animate-pulse bg-muted rounded-md w-30 h-4" />}
+                                  </Link>
+                                )}
+                              >
+                              </DropdownMenuItem>
+                            ))}
+                            {idx !== Object.keys(grouped).length - 1 && <DropdownMenuSeparator />}
+                          </DropdownMenuGroup>
+                        ))
+                      )}
+                </ScrollArea>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenuPositioner>
         </DropdownMenu>
       </div>
     </div>

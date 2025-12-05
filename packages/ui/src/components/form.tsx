@@ -1,8 +1,10 @@
-import type * as LabelPrimitive from '@radix-ui/react-label'
+'use client'
+
 import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
+import { useRender } from '@base-ui-components/react/use-render'
 import { Label } from '@conar/ui/components/label'
+
 import { cn } from '@conar/ui/lib/utils'
-import { Slot } from '@radix-ui/react-slot'
 import * as React from 'react'
 import {
   Controller,
@@ -30,12 +32,10 @@ function FormField<
 >({
   ...props
 }: ControllerProps<TFieldValues, TName>) {
-  const context = React.useMemo(() => ({ name: props.name }), [props.name])
-
   return (
-    <FormFieldContext value={context}>
+    <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />
-    </FormFieldContext>
+    </FormFieldContext.Provider>
   )
 }
 
@@ -72,23 +72,22 @@ function useFormField() {
 
 function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
   const id = React.useId()
-  const context = React.useMemo(() => ({ id }), [id])
 
   return (
-    <FormItemContext value={context}>
+    <FormItemContext.Provider value={{ id }}>
       <div
         data-slot="form-item"
         className={cn('grid gap-2', className)}
         {...props}
       />
-    </FormItemContext>
+    </FormItemContext.Provider>
   )
 }
 
 function FormLabel({
   className,
   ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root>) {
+}: React.ComponentProps<typeof Label>) {
   const { error, formItemId } = useFormField()
 
   return (
@@ -102,22 +101,25 @@ function FormLabel({
   )
 }
 
-function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+function FormControl({
+  children = <div />,
+}: {
+  children?: useRender.RenderProp
+}) {
+  const { error, formItemId, formDescriptionId, formMessageId }
+    = useFormField()
 
-  return (
-    <Slot
-      data-slot="form-control"
-      id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
-      }
-      aria-invalid={!!error}
-      {...props}
-    />
-  )
+  return useRender({
+    render: children,
+    props: {
+      'data-slot': 'form-control',
+      'id': formItemId,
+      'aria-describedby': !error
+        ? `${formDescriptionId}`
+        : `${formDescriptionId} ${formMessageId}`,
+      'aria-invalid': !!error,
+    },
+  })
 }
 
 function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {

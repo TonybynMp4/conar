@@ -1,10 +1,10 @@
 import type { VariantProps } from 'class-variance-authority'
-import type * as React from 'react'
+
+import { Button as ButtonPrimitive } from '@base-ui-components/react/button'
 import { cn } from '@conar/ui/lib/utils'
-import { Slot } from '@radix-ui/react-slot'
 import { cva } from 'class-variance-authority'
 
-export const buttonVariants = cva(
+const buttonVariants = cva(
   'relative cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 active:scale-97 [&_svg]:pointer-events-none [&_svg:not([class*=\'size-\'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
   {
     variants: {
@@ -40,25 +40,23 @@ export const buttonVariants = cva(
   },
 )
 
-export function Button({
-  className,
-  variant,
-  size,
-  type = 'button',
-  asChild = false,
-  ...props
-}: React.ComponentProps<'button'>
-  & VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : 'button'
+type ButtonVariants = VariantProps<typeof buttonVariants>
 
+type ButtonProps = ButtonPrimitive.Props
+  & ButtonVariants & {
+    ref?: React.RefObject<HTMLButtonElement | null>
+  }
+
+function Button({ className, variant, size, ...props }: ButtonProps) {
   return (
-    <Comp
+    <ButtonPrimitive
+      nativeButton
       data-slot="button"
-      type={type}
-      className={cn(buttonVariants({ variant, size }), className)}
+      className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
   )
 }
+
+export { Button, buttonVariants }
+export type { ButtonProps, ButtonVariants }

@@ -2,7 +2,7 @@ import type { tools } from '@conar/shared/ai-tools'
 import type { InferUITools, ToolUIPart } from 'ai'
 import type { ReactNode } from 'react'
 import { SingleAccordion, SingleAccordionContent, SingleAccordionTrigger } from '@conar/ui/components/custom/single-accordion'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { cn } from '@conar/ui/lib/utils'
 import { RiErrorWarningLine, RiHammerLine, RiLoader4Line } from '@remixicon/react'
 import { AnimatePresence, motion } from 'motion/react'
@@ -115,12 +115,16 @@ export function ChatMessageTool({ part, className }: { part: ToolUIPart, classNa
               >
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger asChild>
+                    <TooltipTrigger render={
                       <Icon className="size-4 shrink-0" />
+                    }
+                    >
                     </TooltipTrigger>
-                    <TooltipContent>
-                      {STATE_LABELS[tool.state]}
-                    </TooltipContent>
+                    <TooltipPositioner>
+                      <TooltipContent>
+                        {STATE_LABELS[tool.state]}
+                      </TooltipContent>
+                    </TooltipPositioner>
                   </Tooltip>
                 </TooltipProvider>
               </motion.span>

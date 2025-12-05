@@ -5,7 +5,7 @@ import { Button } from '@conar/ui/components/button'
 import { Checkbox } from '@conar/ui/components/checkbox'
 import { ContentSwitch } from '@conar/ui/components/custom/content-switch'
 import { Separator } from '@conar/ui/components/separator'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { copy } from '@conar/ui/lib/copy'
 import { render } from '@conar/ui/lib/render'
 import { cn } from '@conar/ui/lib/utils'
@@ -80,7 +80,7 @@ function RunnerEditorQueryZone({
         <div className="flex items-center gap-1">
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger render={(
                 <Button
                   variant="ghost"
                   size="icon-xs"
@@ -89,15 +89,19 @@ function RunnerEditorQueryZone({
                 >
                   <RiSaveLine className="size-3.5" />
                 </Button>
+              )}
+              >
               </TooltipTrigger>
-              <TooltipContent>
-                Save
-              </TooltipContent>
+              <TooltipPositioner>
+                <TooltipContent>
+                  Save
+                </TooltipContent>
+              </TooltipPositioner>
             </Tooltip>
           </TooltipProvider>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger render={(
                 <Button
                   variant="ghost"
                   size="icon-xs"
@@ -115,10 +119,14 @@ function RunnerEditorQueryZone({
                     <RiFileCopyLine className="size-3.5" />
                   </ContentSwitch>
                 </Button>
+              )}
+              >
               </TooltipTrigger>
-              <TooltipContent>
-                Copy
-              </TooltipContent>
+              <TooltipPositioner>
+                <TooltipContent>
+                  Copy
+                </TooltipContent>
+              </TooltipPositioner>
             </Tooltip>
           </TooltipProvider>
           <Separator orientation="vertical" className="h-4! mx-1" />

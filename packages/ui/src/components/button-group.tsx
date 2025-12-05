@@ -1,7 +1,9 @@
 import type { VariantProps } from 'class-variance-authority'
+import { mergeProps } from '@base-ui-components/react/merge-props'
+import { useRender } from '@base-ui-components/react/use-render'
+
 import { Separator } from '@conar/ui/components/separator'
 import { cn } from '@conar/ui/lib/utils'
-import { Slot } from '@radix-ui/react-slot'
 import { cva } from 'class-variance-authority'
 
 const buttonGroupVariants = cva(
@@ -10,9 +12,9 @@ const buttonGroupVariants = cva(
     variants: {
       orientation: {
         horizontal:
-          '[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none',
+          '*:not-[&:nth-child(1_of_:not([aria-hidden],span[data-base-ui-inert]))]:rounded-l-none *:not-[&:nth-child(1_of_:not([aria-hidden],span[data-base-ui-inert]))]:border-l-0 *:not-[&:nth-last-child(1_of_:not([aria-hidden],span[data-base-ui-inert]))]:rounded-r-none',
         vertical:
-          'flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none',
+          'flex-col *:not-[&:nth-child(1_of_:not([aria-hidden],span[data-base-ui-inert]))]:rounded-t-none *:not-[&:nth-child(1_of_:not([aria-hidden],span[data-base-ui-inert]))]:border-t-0 *:not-[&:nth-last-child(1_of_:not([aria-hidden],span[data-base-ui-inert]))]:rounded-b-none',
       },
     },
     defaultVariants: {
@@ -39,22 +41,24 @@ function ButtonGroup({
 
 function ButtonGroupText({
   className,
-  asChild = false,
+  render,
   ...props
 }: React.ComponentProps<'div'> & {
-  asChild?: boolean
+  render?: useRender.RenderProp
 }) {
-  const Comp = asChild ? Slot : 'div'
-
-  return (
-    <Comp
-      className={cn(
-        'bg-muted flex items-center gap-2 rounded-md border px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*=\'size-\'])]:size-4',
-        className,
-      )}
-      {...props}
-    />
-  )
+  return useRender({
+    defaultTagName: 'div',
+    render,
+    props: mergeProps(
+      {
+        className: cn(
+          'bg-muted flex items-center gap-2 rounded-md border px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*=\'size-\'])]:size-4',
+          className,
+        ),
+      },
+      props,
+    ),
+  })
 }
 
 function ButtonGroupSeparator({

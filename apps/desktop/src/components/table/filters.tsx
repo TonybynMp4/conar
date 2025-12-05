@@ -3,7 +3,7 @@ import type { RefObject } from 'react'
 import { FILTER_GROUPS_LABELS } from '@conar/shared/filters'
 import { Button } from '@conar/ui/components/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@conar/ui/components/command'
-import { Popover, PopoverContent, PopoverTrigger } from '@conar/ui/components/popover'
+import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@conar/ui/components/popover'
 import { Separator } from '@conar/ui/components/separator'
 import { RiCloseLine, RiCornerDownLeftLine, RiDatabase2Line, RiFilterLine } from '@remixicon/react'
 import { createContext, use, useEffect, useRef, useState } from 'react'
@@ -209,22 +209,26 @@ export function FilterItem({
           <RiDatabase2Line className="size-3 text-primary/70" />
           {filter.column}
         </PopoverTrigger>
-        <PopoverContent className="p-0 shadow-md">
-          <FilterColumnSelector
-            onSelect={column => onEdit({ column, ref: filter.ref, values })}
-          />
-        </PopoverContent>
+        <PopoverPositioner>
+          <PopoverContent className="p-0 shadow-md">
+            <FilterColumnSelector
+              onSelect={column => onEdit({ column, ref: filter.ref, values })}
+            />
+          </PopoverContent>
+        </PopoverPositioner>
       </Popover>
       <Separator orientation="vertical" />
       <Popover>
         <PopoverTrigger className="text-xs px-2 h-full hover:bg-accent/50 transition-colors text-muted-foreground">
           {filter.ref.operator}
         </PopoverTrigger>
-        <PopoverContent className="p-0 shadow-md">
-          <FilterSelector
-            onSelect={operator => onEdit({ column: filter.column, ref: operator, values })}
-          />
-        </PopoverContent>
+        <PopoverPositioner>
+          <PopoverContent className="p-0 shadow-md">
+            <FilterSelector
+              onSelect={operator => onEdit({ column: filter.column, ref: operator, values })}
+            />
+          </PopoverContent>
+        </PopoverPositioner>
       </Popover>
       {!filter.ref.constValue && (
         <>
@@ -236,15 +240,17 @@ export function FilterItem({
                 {(filter.values?.length === 0 || filter.values?.every(value => value === '')) && <span className="opacity-30">Empty</span>}
               </div>
             </PopoverTrigger>
-            <PopoverContent className="p-0 shadow-md max-h-[calc(100vh-10rem)]">
-              <FilterValueSelector
-                column={filter.column}
-                operator={filter.ref.operator}
-                values={values}
-                onChange={setValues}
-                onApply={() => onEdit({ column: filter.column, ref: filter.ref, values })}
-              />
-            </PopoverContent>
+            <PopoverPositioner>
+              <PopoverContent className="p-0 shadow-md max-h-[calc(100vh-10rem)]">
+                <FilterValueSelector
+                  column={filter.column}
+                  operator={filter.ref.operator}
+                  values={values}
+                  onChange={setValues}
+                  onApply={() => onEdit({ column: filter.column, ref: filter.ref, values })}
+                />
+              </PopoverContent>
+            </PopoverPositioner>
           </Popover>
         </>
       )}

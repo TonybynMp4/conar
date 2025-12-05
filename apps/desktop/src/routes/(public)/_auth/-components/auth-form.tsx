@@ -301,11 +301,16 @@ export function AuthForm({ type }: { type: Type }) {
                 <div className="flex items-center justify-between">
                   <FormLabel>Password</FormLabel>
                   {type === 'sign-in' && (
-                    <Button variant="link" size="xs" className="text-muted-foreground" asChild>
-                      <Link to="/forgot-password">
-                        Forgot password?
-                      </Link>
-                    </Button>
+                    <Button
+                      variant="link"
+                      size="xs"
+                      className="text-muted-foreground"
+                      render={(
+                        <Link to="/forgot-password">
+                          Forgot password?
+                        </Link>
+                      )}
+                    />
                   )}
                 </div>
                 <FormControl>

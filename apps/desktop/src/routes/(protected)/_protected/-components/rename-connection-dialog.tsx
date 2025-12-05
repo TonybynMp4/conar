@@ -67,10 +67,12 @@ export function RenameConnectionDialog({ ref }: RenameConnectionDialogProps) {
           </div>
         </DialogHeader>
         <DialogFooter className="mt-4 flex gap-2">
-          <DialogClose asChild>
+          <DialogClose render={(
             <Button variant="outline">
               Cancel
             </Button>
+          )}
+          >
           </DialogClose>
           <Button
             disabled={!canConfirm}

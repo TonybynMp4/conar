@@ -1,10 +1,11 @@
 import type { VariantProps } from 'class-variance-authority'
-import type * as React from 'react'
+import { useRender } from '@base-ui-components/react/use-render'
 import { cn } from '@conar/ui/lib/utils'
-import { Slot } from '@radix-ui/react-slot'
 import { cva } from 'class-variance-authority'
 
-export const badgeVariants = cva(
+import * as React from 'react'
+
+const badgeVariants = cva(
   'inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden',
   {
     variants: {
@@ -14,13 +15,9 @@ export const badgeVariants = cva(
         secondary:
           'border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90',
         destructive:
-          'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/70',
-        success:
-          'border-transparent bg-success text-success-foreground [a&]:hover:bg-success/90 focus-visible:ring-success/20 dark:focus-visible:ring-success/40 dark:bg-success/70',
+          'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         outline:
           'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
-        warning:
-          'border-transparent bg-warning text-warning-foreground [a&]:hover:bg-warning/90',
       },
     },
     defaultVariants: {
@@ -29,20 +26,21 @@ export const badgeVariants = cva(
   },
 )
 
-export function Badge({
+function Badge({
   className,
   variant,
-  asChild = false,
+  render = <span />,
   ...props
 }: React.ComponentProps<'span'>
-  & VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : 'span'
-
-  return (
-    <Comp
-      data-slot="badge"
-      className={cn(badgeVariants({ variant }), className)}
-      {...props}
-    />
-  )
+  & VariantProps<typeof badgeVariants> & { render?: useRender.RenderProp }) {
+  return useRender({
+    render,
+    props: {
+      'data-slot': 'badge',
+      'className': cn(badgeVariants({ variant }), className),
+      ...props,
+    },
+  })
 }
+
+export { Badge, badgeVariants }

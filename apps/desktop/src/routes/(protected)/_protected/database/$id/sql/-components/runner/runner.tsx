@@ -4,7 +4,7 @@ import { CardHeader, CardTitle } from '@conar/ui/components/card'
 import { ContentSwitch } from '@conar/ui/components/custom/content-switch'
 import { CtrlEnter, CtrlLetter } from '@conar/ui/components/custom/shortcuts'
 import { Kbd } from '@conar/ui/components/kbd'
-import { Popover, PopoverContent, PopoverTrigger } from '@conar/ui/components/popover'
+import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@conar/ui/components/popover'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@conar/ui/components/resizable'
 import NumberFlow from '@number-flow/react'
 import { RiBrush2Line, RiCheckLine, RiPlayFill, RiStarLine } from '@remixicon/react'
@@ -124,7 +124,7 @@ export function Runner() {
                   SQL Queries Runner
                   <div className="flex gap-2">
                     <Popover>
-                      <PopoverTrigger asChild>
+                      <PopoverTrigger render={(
                         <Button
                           className="relative"
                           variant="secondary"
@@ -136,13 +136,16 @@ export function Runner() {
                             {queriesCount}
                           </span>
                         </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="min-w-md p-0"
-                        onOpenAutoFocus={e => e.preventDefault()}
+                      )}
                       >
-                        <RunnerQueries />
-                      </PopoverContent>
+                      </PopoverTrigger>
+                      <PopoverPositioner>
+                        <PopoverContent
+                          className="min-w-md p-0"
+                        >
+                          <RunnerQueries />
+                        </PopoverContent>
+                      </PopoverPositioner>
                     </Popover>
                     <Button
                       variant="secondary"
@@ -187,14 +190,14 @@ export function Runner() {
                 <RunnerEditor />
                 <span className="pointer-events-none text-xs text-muted-foreground flex flex-col items-end absolute bottom-2 right-6">
                   <span className="flex items-center gap-1">
-                    <Kbd asChild>
+                    <Kbd>
                       <CtrlLetter letter="K" userAgent={navigator.userAgent} />
                     </Kbd>
                     {' '}
                     to call the AI
                   </span>
                   <span className="flex items-center gap-1">
-                    <Kbd asChild>
+                    <Kbd>
                       <CtrlEnter userAgent={navigator.userAgent} />
                     </Kbd>
                     {' '}

@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@conar/ui/components/c
 import { HighlightText } from '@conar/ui/components/custom/hightlight'
 import { ScrollArea } from '@conar/ui/components/custom/scroll-area'
 import { Input } from '@conar/ui/components/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@conar/ui/components/select'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Select, SelectContent, SelectItem, SelectPositioner, SelectTrigger, SelectValue } from '@conar/ui/components/select'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { cn } from '@conar/ui/lib/utils'
 import { RiCloseLine, RiInformationLine, RiListUnordered } from '@remixicon/react'
 import { createFileRoute } from '@tanstack/react-router'
@@ -25,11 +25,11 @@ function DatabaseEnumsPage() {
   const { data: enums } = useDatabaseEnums({ database })
   const { data } = useDatabaseTablesAndSchemas({ database })
   const schemas = data?.schemas.map(({ name }) => name) ?? []
-  const [selectedSchema, setSelectedSchema] = useState(schemas[0])
+  const [selectedSchema, setSelectedSchema] = useState<string | null>(schemas[0] ?? null)
   const [search, setSearch] = useState('')
 
-  if (schemas.length > 0 && (!selectedSchema || !schemas.includes(selectedSchema)))
-    setSelectedSchema(schemas[0])
+  if (schemas.length > 0 && (selectedSchema == null || !schemas.includes(selectedSchema)))
+    setSelectedSchema(schemas[0] ?? null)
 
   const filteredEnums = enums?.filter(enumItem =>
     enumItem.schema === selectedSchema
@@ -74,13 +74,15 @@ function DatabaseEnumsPage() {
                     <SelectValue placeholder="Select schema" />
                   </div>
                 </SelectTrigger>
-                <SelectContent>
-                  {schemas.map(schema => (
-                    <SelectItem key={schema} value={schema}>
-                      {schema}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+                <SelectPositioner>
+                  <SelectContent>
+                    {schemas.map(schema => (
+                      <SelectItem key={schema} value={schema}>
+                        {schema}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </SelectPositioner>
               </Select>
             )}
           </div>
@@ -102,14 +104,18 @@ function DatabaseEnumsPage() {
                           </CardTitle>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger render={(
                                 <Badge variant="outline" className="text-xs">
                                   {enumItem.schema}
                                 </Badge>
+                              )}
+                              >
                               </TooltipTrigger>
-                              <TooltipContent>
-                                Schema name
-                              </TooltipContent>
+                              <TooltipPositioner>
+                                <TooltipContent>
+                                  Schema name
+                                </TooltipContent>
+                              </TooltipPositioner>
                             </Tooltip>
                           </TooltipProvider>
                         </div>

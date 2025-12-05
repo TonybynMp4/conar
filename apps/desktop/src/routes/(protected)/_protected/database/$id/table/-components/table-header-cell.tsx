@@ -1,7 +1,7 @@
 import type { TableHeaderCellProps } from '~/components/table'
 import type { Column } from '~/entities/database'
 import { Button } from '@conar/ui/components/button'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { cn } from '@conar/ui/lib/utils'
 import { RiArrowDownLine, RiArrowUpDownLine, RiArrowUpLine, RiBookOpenLine, RiEraserLine, RiFingerprintLine, RiKey2Line, RiLinksLine } from '@remixicon/react'
 import { useStore } from '@tanstack/react-store'
@@ -13,7 +13,7 @@ function SortButton({ order, onClick }: { order: 'ASC' | 'DESC' | null, onClick:
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger render={(
           <Button
             variant="ghost"
             size="icon-xs"
@@ -32,10 +32,14 @@ function SortButton({ order, onClick }: { order: 'ASC' | 'DESC' | null, onClick:
                     <RiArrowUpDownLine className="size-3 opacity-30" />
                   )}
           </Button>
+        )}
+        >
         </TooltipTrigger>
-        <TooltipContent>
-          {order === null ? 'Sort' : order === 'ASC' ? 'Sort ascending' : 'Sort descending'}
-        </TooltipContent>
+        <TooltipPositioner>
+          <TooltipContent>
+            {order === null ? 'Sort' : order === 'ASC' ? 'Sort ascending' : 'Sort descending'}
+          </TooltipContent>
+        </TooltipPositioner>
       </Tooltip>
     </TooltipProvider>
   )
@@ -82,90 +86,110 @@ export function TableHeaderCell({
             {column.primaryKey && (
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild>
+                  <TooltipTrigger render={
                     <RiKey2Line className="size-3 text-primary" />
+                  }
+                  >
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="flex items-center gap-1 mb-1">
-                      <RiKey2Line className="size-3 text-primary" />
-                      <span>Primary key</span>
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {column.primaryKey}
-                    </div>
-                  </TooltipContent>
+                  <TooltipPositioner>
+                    <TooltipContent>
+                      <div className="flex items-center gap-1 mb-1">
+                        <RiKey2Line className="size-3 text-primary" />
+                        <span>Primary key</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {column.primaryKey}
+                      </div>
+                    </TooltipContent>
+                  </TooltipPositioner>
                 </Tooltip>
               </TooltipProvider>
             )}
             {column.isNullable && (
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild>
+                  <TooltipTrigger render={
                     <RiEraserLine className="size-3 text-muted-foreground/70" />
+                  }
+                  >
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="flex items-center gap-1">
-                      <RiEraserLine className="size-3 text-muted-foreground/70" />
-                      <span>Nullable</span>
-                    </div>
-                  </TooltipContent>
+                  <TooltipPositioner>
+                    <TooltipContent>
+                      <div className="flex items-center gap-1">
+                        <RiEraserLine className="size-3 text-muted-foreground/70" />
+                        <span>Nullable</span>
+                      </div>
+                    </TooltipContent>
+                  </TooltipPositioner>
                 </Tooltip>
               </TooltipProvider>
             )}
             {column.unique && (
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild>
+                  <TooltipTrigger render={
                     <RiFingerprintLine className="size-3 text-muted-foreground/70" />
+                  }
+                  >
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="flex items-center gap-1 mb-1">
-                      <RiFingerprintLine className="size-3 text-muted-foreground/70" />
-                      <span>Unique</span>
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {column.unique}
-                    </div>
-                  </TooltipContent>
+                  <TooltipPositioner>
+                    <TooltipContent>
+                      <div className="flex items-center gap-1 mb-1">
+                        <RiFingerprintLine className="size-3 text-muted-foreground/70" />
+                        <span>Unique</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {column.unique}
+                      </div>
+                    </TooltipContent>
+                  </TooltipPositioner>
                 </Tooltip>
               </TooltipProvider>
             )}
             {column.isEditable === false && (
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild>
+                  <TooltipTrigger render={
                     <RiBookOpenLine className="size-3 text-muted-foreground/70" />
+                  }
+                  >
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="flex items-center gap-1">
-                      <RiBookOpenLine className="size-3 text-muted-foreground/70" />
-                      <span>Read only</span>
-                    </div>
-                  </TooltipContent>
+                  <TooltipPositioner>
+                    <TooltipContent>
+                      <div className="flex items-center gap-1">
+                        <RiBookOpenLine className="size-3 text-muted-foreground/70" />
+                        <span>Read only</span>
+                      </div>
+                    </TooltipContent>
+                  </TooltipPositioner>
                 </Tooltip>
               </TooltipProvider>
             )}
             {column.foreign && (
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild>
+                  <TooltipTrigger render={
                     <RiLinksLine className="size-3 text-muted-foreground/70" />
+                  }
+                  >
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="flex items-center gap-1">
-                      <RiLinksLine className="size-3 text-muted-foreground/70" />
-                      <span>Foreign key</span>
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {column.foreign.name}
-                      {' '}
-                      (
-                      {column.foreign.table}
-                      .
-                      {column.foreign.column}
-                      )
-                    </div>
-                  </TooltipContent>
+                  <TooltipPositioner>
+                    <TooltipContent>
+                      <div className="flex items-center gap-1">
+                        <RiLinksLine className="size-3 text-muted-foreground/70" />
+                        <span>Foreign key</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {column.foreign.name}
+                        {' '}
+                        (
+                        {column.foreign.table}
+                        .
+                        {column.foreign.column}
+                        )
+                      </div>
+                    </TooltipContent>
+                  </TooltipPositioner>
                 </Tooltip>
               </TooltipProvider>
             )}

@@ -9,7 +9,7 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogT
 import { Label } from '@conar/ui/components/label'
 import { Separator } from '@conar/ui/components/separator'
 import { Textarea } from '@conar/ui/components/textarea'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { cn } from '@conar/ui/lib/utils'
 import { RiCloseLine, RiCommandLine, RiFileListLine, RiListUnordered, RiMessageLine, RiMoonLine, RiNodeTree, RiPlayLargeLine, RiSettings3Line, RiSunLine, RiTableLine } from '@remixicon/react'
 import { useLiveQuery } from '@tanstack/react-db'
@@ -66,14 +66,19 @@ function SupportButton() {
     <Dialog open={open} onOpenChange={setOpen}>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>
-            <DialogTrigger asChild>
+          <TooltipTrigger render={(
+            <DialogTrigger render={(
               <Button size="icon" variant="ghost">
                 <RiMessageLine className="size-4" />
               </Button>
+            )}
+            >
             </DialogTrigger>
-          </TooltipTrigger>
-          <TooltipContent side="right">Support</TooltipContent>
+          )}
+          />
+          <TooltipPositioner side="right">
+            <TooltipContent>Support</TooltipContent>
+          </TooltipPositioner>
         </Tooltip>
       </TooltipProvider>
       <DialogContent>
@@ -97,11 +102,12 @@ function SupportButton() {
             />
           </div>
           <DialogFooter>
-            <DialogClose asChild>
+            <DialogClose render={(
               <Button type="button" variant="outline">
                 Cancel
               </Button>
-            </DialogClose>
+            )}
+            />
             <Button type="submit" disabled={loading || !message}>
               <LoadingContent loading={loading}>
                 Send
@@ -120,14 +126,17 @@ function SettingsButton() {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger render={(
           <Link to="/database/$id/settings" params={{ id: database.id }}>
             <Button size="icon" variant="ghost">
               <RiSettings3Line className="size-4" />
             </Button>
           </Link>
-        </TooltipTrigger>
-        <TooltipContent side="right">Settings</TooltipContent>
+        )}
+        />
+        <TooltipPositioner side="right">
+          <TooltipContent>Settings</TooltipContent>
+        </TooltipPositioner>
       </Tooltip>
     </TooltipProvider>
   )
@@ -147,7 +156,7 @@ function LastOpenedDatabase({ database }: { database: typeof databases.$inferSel
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger render={(
           <div className="relative group">
             {!isActive && (
               <span
@@ -182,13 +191,16 @@ function LastOpenedDatabase({ database }: { database: typeof databases.$inferSel
               </span>
             </Link>
           </div>
-        </TooltipTrigger>
-        <TooltipContent side="right" sideOffset={10}>
-          <span className="flex items-center gap-2 font-medium">
-            <DatabaseIcon type={database.type} className="size-4 -ml-1" />
-            {database.name}
-          </span>
-        </TooltipContent>
+        )}
+        />
+        <TooltipPositioner side="right" sideOffset={10}>
+          <TooltipContent>
+            <span className="flex items-center gap-2 font-medium">
+              <DatabaseIcon type={database.type} className="size-4 -ml-1" />
+              {database.name}
+            </span>
+          </TooltipContent>
+        </TooltipPositioner>
       </Tooltip>
     </TooltipProvider>
   )
@@ -257,7 +269,7 @@ function MainLinks() {
     <>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger render={(
             <Link
               to="/database/$id/sql"
               params={{ id: database.id }}
@@ -266,13 +278,16 @@ function MainLinks() {
             >
               <RiPlayLargeLine className="size-4" />
             </Link>
-          </TooltipTrigger>
-          <TooltipContent side="right">SQL Runner</TooltipContent>
+          )}
+          />
+          <TooltipPositioner side="right">
+            <TooltipContent>SQL Runner</TooltipContent>
+          </TooltipPositioner>
         </Tooltip>
       </TooltipProvider>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger render={(
             <Link
               className={baseClasses(isActiveTables)}
               {...route}
@@ -282,13 +297,16 @@ function MainLinks() {
             >
               <RiTableLine className="size-4" />
             </Link>
-          </TooltipTrigger>
-          <TooltipContent side="right">Tables</TooltipContent>
+          )}
+          />
+          <TooltipPositioner side="right">
+            <TooltipContent>Tables</TooltipContent>
+          </TooltipPositioner>
         </Tooltip>
       </TooltipProvider>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger render={(
             <Link
               to="/database/$id/enums"
               params={{ id: database.id }}
@@ -296,18 +314,24 @@ function MainLinks() {
             >
               <RiListUnordered className="size-4" />
             </Link>
-          </TooltipTrigger>
-          <TooltipContent side="right">Enums</TooltipContent>
+          )}
+          />
+          <TooltipPositioner side="right">
+            <TooltipContent>Enums</TooltipContent>
+          </TooltipPositioner>
         </Tooltip>
       </TooltipProvider>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger render={(
             <Link to="/database/$id/visualizer" params={{ id: database.id }} className={baseClasses(isActiveVisualizer)}>
               <RiNodeTree className="size-4" />
             </Link>
-          </TooltipTrigger>
-          <TooltipContent side="right">Visualizer</TooltipContent>
+          )}
+          />
+          <TooltipPositioner side="right">
+            <TooltipContent>Visualizer</TooltipContent>
+          </TooltipPositioner>
         </Tooltip>
       </TooltipProvider>
     </>
@@ -324,15 +348,18 @@ export function DatabaseSidebar({ className, ...props }: React.ComponentProps<'d
       <div className="flex flex-col p-4 pb-0">
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger render={(
               <Link
                 to="/"
                 className="p-2"
               >
                 <AppLogo className="size-6 text-primary" />
               </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Dashboard</TooltipContent>
+            )}
+            />
+            <TooltipPositioner side="right">
+              <TooltipContent>Dashboard</TooltipContent>
+            </TooltipPositioner>
           </Tooltip>
         </TooltipProvider>
       </div>
@@ -352,7 +379,7 @@ export function DatabaseSidebar({ className, ...props }: React.ComponentProps<'d
       <div className="p-4 pt-0 flex flex-col items-center">
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger render={(
               <Button
                 size="icon"
                 variant="ghost"
@@ -360,15 +387,18 @@ export function DatabaseSidebar({ className, ...props }: React.ComponentProps<'d
               >
                 <RiFileListLine className="size-4" />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">Query Logger</TooltipContent>
+            )}
+            />
+            <TooltipPositioner side="right">
+              <TooltipContent>Query Logger</TooltipContent>
+            </TooltipPositioner>
           </Tooltip>
         </TooltipProvider>
         <Separator className="my-4" />
         <SupportButton />
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger render={(
               <Button
                 size="icon"
                 variant="ghost"
@@ -376,11 +406,14 @@ export function DatabaseSidebar({ className, ...props }: React.ComponentProps<'d
               >
                 <RiCommandLine className="size-4" />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              {os?.type === 'macos' ? '⌘' : 'Ctrl'}
-              P
-            </TooltipContent>
+            )}
+            />
+            <TooltipPositioner side="right">
+              <TooltipContent>
+                {os?.type === 'macos' ? '⌘' : 'Ctrl'}
+                P
+              </TooltipContent>
+            </TooltipPositioner>
           </Tooltip>
         </TooltipProvider>
         <ThemeToggle>

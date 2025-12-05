@@ -84,14 +84,14 @@ export function Hero({ className }: { className?: string }) {
           <DownloadButton />
           <Button
             variant="secondary"
-            asChild
             size="lg"
             className="w-full sm:w-auto"
-          >
-            <Link to="/download">
-              All platforms
-            </Link>
-          </Button>
+            render={(
+              <Link to="/download">
+                All platforms
+              </Link>
+            )}
+          />
         </motion.div>
       </div>
     </motion.section>

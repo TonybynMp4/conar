@@ -3,7 +3,7 @@ import { Button } from '@conar/ui/components/button'
 import { ContentSwitch } from '@conar/ui/components/custom/content-switch'
 import { LoadingContent } from '@conar/ui/components/custom/loading-content'
 import { Separator } from '@conar/ui/components/separator'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { RiCheckLine, RiExportLine, RiLoopLeftLine } from '@remixicon/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useStore } from '@tanstack/react-store'
@@ -83,7 +83,7 @@ export function HeaderActions({ table, schema, database }: { table: string, sche
       <HeaderActionsFilters />
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger render={(
             <Button
               variant="outline"
               size="icon"
@@ -99,15 +99,18 @@ export function HeaderActions({ table, schema, database }: { table: string, sche
                 </ContentSwitch>
               </LoadingContent>
             </Button>
-          </TooltipTrigger>
-          <TooltipContent side="top" align="end">
-            Refresh rows
-            <p className="text-xs text-muted-foreground">
-              Last updated:
-              {' '}
-              {dataUpdatedAt ? new Date(dataUpdatedAt).toLocaleTimeString() : 'never'}
-            </p>
-          </TooltipContent>
+          )}
+          />
+          <TooltipPositioner side="top" align="end">
+            <TooltipContent>
+              Refresh rows
+              <p className="text-xs text-muted-foreground">
+                Last updated:
+                {' '}
+                {dataUpdatedAt ? new Date(dataUpdatedAt).toLocaleTimeString() : 'never'}
+              </p>
+            </TooltipContent>
+          </TooltipPositioner>
         </Tooltip>
       </TooltipProvider>
       <Separator orientation="vertical" className="h-6!" />

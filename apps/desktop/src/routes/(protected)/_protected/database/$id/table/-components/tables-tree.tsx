@@ -3,9 +3,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@c
 import { Button } from '@conar/ui/components/button'
 import { HighlightText } from '@conar/ui/components/custom/hightlight'
 import { ScrollArea } from '@conar/ui/components/custom/scroll-area'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPositioner, DropdownMenuTrigger } from '@conar/ui/components/dropdown-menu'
 import { Separator } from '@conar/ui/components/separator'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
+import { Tooltip, TooltipContent, TooltipPositioner, TooltipProvider, TooltipTrigger } from '@conar/ui/components/tooltip'
 import { copy as copyToClipboard } from '@conar/ui/lib/copy'
 import { cn } from '@conar/ui/lib/utils'
 import { RiDeleteBin7Line, RiEditLine, RiFileCopyLine, RiMoreLine, RiPushpinFill, RiPushpinLine, RiStackLine, RiTableLine } from '@remixicon/react'
@@ -89,7 +89,7 @@ function TableItem({ schema, table, isPinned = false, search, onRename, onDrop }
       </span>
       <Button
         variant="ghost"
-        size="icon-xs"
+        size="icon-sm"
         className={cn(
           'opacity-0 focus-visible:opacity-100 group-hover:opacity-100 ml-auto transition-opacity -mr-1',
           tableParam === table && 'hover:bg-primary/10',
@@ -103,10 +103,10 @@ function TableItem({ schema, table, isPinned = false, search, onRename, onDrop }
         {isPinned ? <RiPushpinFill className="size-3 text-primary" /> : <RiPushpinLine className="size-3" />}
       </Button>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger render={(
           <Button
             variant="ghost"
-            size="icon-xs"
+            size="icon-sm"
             className={cn(
               'opacity-0 focus-visible:opacity-100 group-hover:opacity-100 transition-opacity',
               tableParam === table && 'hover:bg-primary/10',
@@ -115,37 +115,41 @@ function TableItem({ schema, table, isPinned = false, search, onRename, onDrop }
           >
             <RiMoreLine className="size-3" />
           </Button>
+        )}
+        >
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="min-w-48">
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation()
-              copyToClipboard(table, 'Table name copied')
-            }}
-          >
-            <RiFileCopyLine className="size-4" />
-            Copy Name
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation()
-              onRename()
-            }}
-          >
-            <RiEditLine className="size-4" />
-            Rename
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={(e) => {
-              e.stopPropagation()
-              onDrop()
-            }}
-          >
-            <RiDeleteBin7Line className="size-4" />
-            Drop
-          </DropdownMenuItem>
-        </DropdownMenuContent>
+        <DropdownMenuPositioner align="end">
+          <DropdownMenuContent className="min-w-48">
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation()
+                copyToClipboard(table, 'Table name copied')
+              }}
+            >
+              <RiFileCopyLine className="size-4" />
+              Copy Name
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation()
+                onRename()
+              }}
+            >
+              <RiEditLine className="size-4" />
+              Rename
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={(e) => {
+                e.stopPropagation()
+                onDrop()
+              }}
+            >
+              <RiDeleteBin7Line className="size-4" />
+              Drop
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuPositioner>
       </DropdownMenu>
     </Link>
   )
@@ -231,7 +235,7 @@ export function TablesTree({ className, search }: { className?: string, search?:
           }
         }}
         data-mask
-        type="multiple"
+        multiple
         className="w-full space-y-2"
       >
         {isPending
@@ -265,17 +269,21 @@ export function TablesTree({ className, search }: { className?: string, search?:
                           <span className="flex items-center gap-2">
                             <TooltipProvider>
                               <Tooltip>
-                                <TooltipTrigger asChild>
+                                <TooltipTrigger render={(
                                   <RiStackLine
                                     className={cn(
                                       'size-4 text-muted-foreground shrink-0 opacity-50',
                                       schemaParam === schema.name && 'text-primary opacity-100',
                                     )}
                                   />
+                                )}
+                                >
                                 </TooltipTrigger>
-                                <TooltipContent>
-                                  Schema
-                                </TooltipContent>
+                                <TooltipPositioner>
+                                  <TooltipContent>
+                                    Schema
+                                  </TooltipContent>
+                                </TooltipPositioner>
                               </Tooltip>
                             </TooltipProvider>
                             {schema.name}
